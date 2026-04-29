@@ -833,7 +833,7 @@ const AlumniRegistration = () => {
 
           <button
             onClick={() => navigate("/")}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#6b5dd5] to-[#8b4b9e] text-white font-semibold text-sm tracking-wide hover:shadow-lg hover:shadow-[#8b4b9e]/30 transition-all duration-200"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#b8882a] to-[#e0bc55] text-[#08090f] font-semibold text-sm tracking-wide hover:shadow-lg hover:shadow-[#b8882a]/30 transition-all duration-200"
           >
             Return to Home
           </button>
@@ -848,7 +848,7 @@ const AlumniRegistration = () => {
       className="fixed inset-0 overflow-y-auto z-50 md:p-12"
       style={{
         background:
-          "linear-gradient(135deg, #f8f6fc 0%, #ffffff 50%, #f6f9ff 100%)",
+          "linear-gradient(135deg, #faf8f3 0%, #ffffff 50%, #f9f7f0 100%)",
       }}
     >
       <div className="min-h-full flex flex-col items-center justify-start py-10 px-4">
@@ -922,7 +922,7 @@ const AlumniRegistration = () => {
             transition={{ duration: 0.3 }}
           >
             {/* Card Header Bar */}
-            <div className="bg-gradient-to-r from-[#6b5dd5] to-[#8b4b9e] px-8 py-5 flex items-center gap-3">
+            <div className="bg-gradient-to-r from-[#b8882a] to-[#e0bc55] px-8 py-5 flex items-center gap-3">
               {(() => {
                 const Icon = STEPS[step - 1].icon;
                 return <Icon size={18} className="text-white/80" />;
@@ -1861,8 +1861,8 @@ const AlumniRegistration = () => {
                     type="button"
                     onClick={handleNext}
                     className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r
-                    from-[#6b5dd5] to-[#8b4b9e] text-white text-sm font-semibold
-                    hover:shadow-lg hover:shadow-[#8b4b9e]/30 transition-all duration-200"
+                    from-[#b8882a] to-[#e0bc55] text-[#08090f] text-sm font-semibold
+                    hover:shadow-lg hover:shadow-[#b8882a]/30 transition-all duration-200"
                   >
                     Next <ChevronRight size={16} />
                   </button>
@@ -1871,8 +1871,8 @@ const AlumniRegistration = () => {
                     type="submit"
                     disabled={loading}
                     className="flex items-center gap-2 px-8 py-2.5 rounded-xl bg-gradient-to-r
-                    from-[#6b5dd5] to-[#8b4b9e] text-white text-sm font-semibold
-                    hover:shadow-lg hover:shadow-[#8b4b9e]/30 transition-all duration-200
+                    from-[#b8882a] to-[#e0bc55] text-[#08090f] text-sm font-semibold
+                    hover:shadow-lg hover:shadow-[#b8882a]/30 transition-all duration-200
                     disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {loading ? (
