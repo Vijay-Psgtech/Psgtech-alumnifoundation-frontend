@@ -46,6 +46,11 @@ const MyDonationHistory = lazy(
 // ═══════════════════════════════════════════════════════════════════════
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminEvents = lazy(() => import("./pages/admin/AdminEvents"));
+const AlumniUsers = lazy(() => import("./pages/admin/AlumniUsersList"));
+const AdminNewsLetter = lazy(() => import("./pages/admin/AdminNewsLetter"));
+const AdminReports = lazy(() => import("./pages/admin/AdminReports"));
+const AdminNotifications = lazy(() => import("./pages/admin/AdminNotifications"));
 
 // ── Redirects logged-in ALUMNI away from login/register ──────────
 const PublicOnlyRoute = ({ children }) => {
@@ -188,6 +193,51 @@ export default function App() {
                 </ProtectedAdminRoute>
               }
             />
+
+            <Route
+                path="admin/events"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminEvents />
+                  </ProtectedAdminRoute>
+                }
+              />
+
+              <Route
+                path="admin/newsletters"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminNewsLetter />
+                  </ProtectedAdminRoute>
+                }
+              />
+
+              <Route
+                path="admin/users"
+                element={
+                  <ProtectedAdminRoute>
+                    <AlumniUsers />
+                  </ProtectedAdminRoute>
+                }
+              />
+
+              <Route
+                path="admin/reports"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminReports />
+                  </ProtectedAdminRoute>
+                }
+              />
+
+              <Route
+                path="admin/notifications"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminNotifications />
+                  </ProtectedAdminRoute>
+                }
+              />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
