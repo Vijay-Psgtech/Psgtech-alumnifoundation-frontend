@@ -96,7 +96,7 @@ const AlumniLogin = () => {
        <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden">
         {/* Left Panel — Branding */}
-        <div className="hidden md:flex flex-col items-center justify-center w-1/2 bg-gradient-to-br from-[#6b5dd5] to-[#8b4b9e] shadow-2xl p-8 text-center text-white">
+        <div className="hidden md:flex flex-col items-center justify-center w-1/2 bg-gradient-to-br from-[#1a1410] to-[#3d2f1f] shadow-2xl p-8 text-center text-white">
           <img src="/psg_logo.jpg" alt="Logo" className="h-20 mb-6 opacity-90" />
           <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
           <p className="text-sm font-semibold opacity-90">
@@ -121,8 +121,8 @@ const AlumniLogin = () => {
         {/* Right Panel — Login Form */}
         <div className="w-full md:w-1/2 p-8">
           <div className="flex flex-col items-center mb-6">
-            <div className="bg-blue-100 p-3 rounded-full mb-2">
-              <LogIn className="text-blue-700" size={32} />
+            <div className="bg-gradient-to-br from-[#b8882a] to-[#8b6b23] p-3 rounded-full mb-2">
+              <LogIn className="text-white" size={32} />
             </div>
             <h2 className="text-xl font-semibold text-gray-800">Login</h2>
             <p className="text-xs text-gray-500 mt-1">Enter your credentials to continue</p>
@@ -192,7 +192,7 @@ const AlumniLogin = () => {
             <div className="flex justify-end pt-2">
               <Link 
                 to="/forgot-password" 
-                className="text-[#764ba2] hover:text-[#667eea] text-xs font-semibold hover:underline transition"
+                className="text-[#b8882a] hover:text-[#e0bc55] text-xs font-semibold hover:underline transition"
               >
                 Forgot Password?
               </Link>
@@ -204,14 +204,14 @@ const AlumniLogin = () => {
                 type="button"
                 onClick={resetFields}
                 disabled={loading}
-                className="flex-1 px-5 py-2.5 rounded-lg font-semibold text-sm text-[#764ba2] border border-[#764ba2] hover:bg-[#764ba2]/5 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-5 py-2.5 rounded-lg font-semibold text-sm text-[#b8882a] border border-[#b8882a] hover:bg-[#b8882a]/5 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Clear
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#6b5dd5] to-[#8b4b9e] hover:shadow-lg hover:shadow-[#8b4b9e]/30 disabled:opacity-60 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg shadow-md shadow-[#8b4b9e]/20 font-semibold text-sm transition-all"
+                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#b8882a] to-[#e0bc55] hover:shadow-lg hover:shadow-[#b8882a]/30 disabled:opacity-60 disabled:cursor-not-allowed text-[#08090f] px-5 py-2.5 rounded-lg shadow-md shadow-[#b8882a]/20 font-semibold text-sm transition-all"
               >
                 {loading ? (
                   <>
@@ -232,7 +232,7 @@ const AlumniLogin = () => {
               Don't have an account?{" "}
               <Link
                 to="/alumni/register"
-                className="text-[#667eea] font-semibold hover:text-[#764ba2] hover:underline transition"
+                className="text-[#b8882a] font-semibold hover:text-[#e0bc55] hover:underline transition"
               >
                 Create one now
               </Link>
