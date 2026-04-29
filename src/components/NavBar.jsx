@@ -1,9 +1,23 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Menu, X, ChevronDown, LogOut, User, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  LogOut,
+  User,
+  LayoutDashboard,
+  Calendar,
+  Users,
+  FileText,
+  Heart,
+  Settings,
+  LayoutDashboardIcon,
+} from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Logo from "../assets/Images/staffImages/psg_logo.jpg";
+import { s } from "framer-motion/client";
 
 export default function NavBar() {
   const { user, logout } = useAuth();
@@ -15,71 +29,140 @@ export default function NavBar() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
   const [alumniOpen, setAlumniOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
   const [mobileEventsOpen, setMobileEventsOpen] = useState(false);
   const [mobileAlumniOpen, setMobileAlumniOpen] = useState(false);
+  const [mobileAdminOpen, setMobileAdminOpen] = useState(false);
   const navRef = useRef(null);
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
 
+  // ✅ Navigation items based on user role
+  const getNavItems = () => {
+    const baseItems = [
+      { label: "Home", path: "/" },
+      {
+        label: "About",
+        submenu: [
+          { label: "Overview", path: "/about" },
+          { label: "Patrons", path: "/patrons" },
+          { label: "Office Bearers", path: "/officebearers" },
+        ],
+      },
+      { label: "Objectives", path: "/objectives" },
+      {
+        label: "Events",
+        submenu: [
+          { label: "All Events", path: "/events" },
+          { label: "Calendar", path: "/events/calendar" },
+          { label: "Year Albums", path: "/events/albums" },
+        ],
+      },
+      {
+        label: "Find Alumni",
+        submenu: [
+          {
+            label: "Alumni Directory",
+            path: "/alumni/directory",
+            requireAuth: true,
+          },
+          { label: "Alumni Map", path: "/alumni/map", requireAuth: true },
+          {
+            label: "Alumni Chapters",
+            path: "/alumni/chapters",
+            requireAuth: true,
+            icon: "Layers",
+          },
+        ],
+      },
+
+      { label: "Contact", path: "/contact" },
+    ];
+
+    if (user?.role === "admin" || user?.role === "superadmin") {
+      baseItems.push({
+        label: "Admin",
+        submenu: [
+          { label: "Dashboard", path: "/admin/dashboard" },
+          { label: "Events", path: "/admin/events" },
+          { label: "Newsletters", path: "/admin/newsletters" },
+          { label: "Alumni Management", path: "/admin/users" },
+          { label: "Reports", path: "/admin/reports" },
+        ],
+      });
+    }
+
+    return baseItems;
+  };
+
   // ✅ FIXED: All items are proper objects — no raw JSX in array
-  const navItems = [
-    { label: "Home", path: "/" },
-    {
-      label: "About",
-      submenu: [
-        { label: "Overview", path: "/about" },
-        { label: "Patrons", path: "/patrons" },
-        { label: "Office Bearers", path: "/officebearers" },
-      ],
-    },
-    { label: "Objectives", path: "/objectives" },
-    {
-      label: "Events",
-      submenu: [
-        { label: "All Events", path: "/events" },
-        { label: "Calendar", path: "/events/calendar" },
-        { label: "Year Albums", path: "/events/albums" },
-      ],
-    },
-    { label: "Contact", path: "/contact" },
-    {
-      label: "Alumni",
-      submenu: [
-        user ? { label: "Directory", path: "/alumni/directory" } : null,
-        user ? { label: "Alumni Map", path: "/alumni/map" } : null,
-        user ? { label: "My Profile", path: "/alumni/profile" } : null,
-        user ? { label: "My Donations", path: "/alumni/donations" } : null,
-        user?.isAdmin ? { label: "Admin Dashboard", path: "/admin/dashboard" } : null,
-      ].filter(Boolean),
-    },
-  ];
+  // const navItems = [
+  //   { label: "Home", path: "/" },
+  //   {
+  //     label: "About",
+  //     submenu: [
+  //       { label: "Overview", path: "/about" },
+  //       { label: "Patrons", path: "/patrons" },
+  //       { label: "Office Bearers", path: "/officebearers" },
+  //     ],
+  //   },
+  //   { label: "Objectives", path: "/objectives" },
+  //   { label: "Newsletter", path: "/newsletter" },
+  //   {
+  //     label: "Events",
+  //     submenu: [
+  //       { label: "All Events", path: "/events" },
+  //       { label: "Calendar", path: "/events/calendar" },
+  //       { label: "Year Albums", path: "/events/albums" },
+  //     ],
+  //   },
+  //   { label: "Contact", path: "/contact" },
+  //   {
+  //     label: "Alumni",
+  //     submenu: [
+  //       user ? { label: "Directory", path: "/alumni/directory" } : null,
+  //       user ? { label: "Alumni Map", path: "/alumni/map" } : null,
+  //       user ? { label: "My Profile", path: "/alumni/profile" } : null,
+  //       user ? { label: "My Donations", path: "/alumni/donations" } : null,
+  //       user?.isAdmin
+  //         ? { label: "Admin Dashboard", path: "/admin/dashboard" }
+  //         : null,
+  //     ].filter(Boolean),
+  //   },
+  // ];
+
+  const navItems = getNavItems();
 
   // Helper to check which dropdown is open
   const isDropdownOpen = (label) => {
     if (label === "About") return aboutOpen;
     if (label === "Events") return eventsOpen;
-    if (label === "Alumni") return alumniOpen;
+    if (label === "Find Alumni") return alumniOpen;
+    if (label === "Admin") return adminOpen;
     return false;
   };
 
   const toggleDropdown = (label) => {
     setAboutOpen(label === "About" ? (p) => !p : false);
     setEventsOpen(label === "Events" ? (p) => !p : false);
-    setAlumniOpen(label === "Alumni" ? (p) => !p : false);
+    setAlumniOpen(label === "Find Alumni" ? (p) => !p : false);
+    setAdminOpen(label === "Admin" ? (p) => !p : false);
   };
 
   const toggleMobileDropdown = (label) => {
     if (label === "About") setMobileAboutOpen((p) => !p);
     if (label === "Events") setMobileEventsOpen((p) => !p);
-    if (label === "Alumni") setMobileAlumniOpen((p) => !p);
+    if (label === "Find Alumni") setMobileAlumniOpen((p) => !p);
+    if (label === "Admin") setMobileAdminOpen((p) => !p);
   };
 
   const isMobileDropdownOpen = (label) => {
     if (label === "About") return mobileAboutOpen;
     if (label === "Events") return mobileEventsOpen;
-    if (label === "Alumni") return mobileAlumniOpen;
+    if (label === "Find Alumni") return mobileAlumniOpen;
+    if (label === "Admin") return mobileAdminOpen;
     return false;
   };
 
@@ -100,6 +183,7 @@ export default function NavBar() {
         setAboutOpen(false);
         setEventsOpen(false);
         setAlumniOpen(false);
+        setAdminOpen(false);
       }
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
         setUserMenuOpen(false);
@@ -121,6 +205,7 @@ export default function NavBar() {
     setAboutOpen(false);
     setEventsOpen(false);
     setAlumniOpen(false);
+    setAdminOpen(false);
   }, []);
 
   return (
@@ -381,10 +466,11 @@ export default function NavBar() {
         }
       `}</style>
 
-      <nav className={`psg-nav ${!navVisible ? "hidden-nav" : ""} ${scrolled ? "scrolled" : "top"}`}>
+      <nav
+        className={`psg-nav ${!navVisible ? "hidden-nav" : ""} ${scrolled ? "scrolled" : "top"}`}
+      >
         <div className="nav-gold-line" />
         <div className="nav-inner" ref={navRef}>
-
           {/* LOGO */}
           <Link to="/" className="nav-logo">
             <div className="nav-logo-img-wrap">
@@ -411,15 +497,23 @@ export default function NavBar() {
                       className={`chevron-icon ${isDropdownOpen(item.label) ? "chevron-open" : ""}`}
                     />
                   </button>
-                  <div className={`dropdown-panel ${isDropdownOpen(item.label) ? "open" : ""}`}>
+                  <div
+                    className={`dropdown-panel ${isDropdownOpen(item.label) ? "open" : ""}`}
+                  >
                     <div className="dropdown-gold-bar" />
                     <div style={{ padding: "6px 0" }}>
                       {item.submenu.map((sub) => (
                         <NavLink
                           key={sub.path}
                           to={sub.path}
-                          onClick={() => { setAboutOpen(false); setEventsOpen(false); setAlumniOpen(false); }}
-                          className={({ isActive }) => `dropdown-item${isActive ? " active-dd" : ""}`}
+                          onClick={() => {
+                            setAboutOpen(false);
+                            setEventsOpen(false);
+                            setAlumniOpen(false);
+                          }}
+                          className={({ isActive }) =>
+                            `dropdown-item${isActive ? " active-dd" : ""}`
+                          }
                         >
                           {sub.label}
                         </NavLink>
@@ -431,11 +525,13 @@ export default function NavBar() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+                  className={({ isActive }) =>
+                    `nav-link${isActive ? " active" : ""}`
+                  }
                 >
                   {item.label}
                 </NavLink>
-              )
+              ),
             )}
           </div>
 
@@ -443,7 +539,10 @@ export default function NavBar() {
           <div className="nav-actions">
             {user ? (
               <div style={{ position: "relative" }} ref={userMenuRef}>
-                <button className="user-btn" onClick={() => setUserMenuOpen((p) => !p)}>
+                <button
+                  className="user-btn"
+                  onClick={() => setUserMenuOpen((p) => !p)}
+                >
                   <div className="user-avatar">
                     {user.firstName?.[0]}
                     {user.lastName?.[0]}
@@ -451,7 +550,10 @@ export default function NavBar() {
                   <div>
                     <div className="user-name">{user.firstName}</div>
                   </div>
-                  <ChevronDown size={13} className={`chevron-icon ${userMenuOpen ? "chevron-open" : ""}`} />
+                  <ChevronDown
+                    size={13}
+                    className={`chevron-icon ${userMenuOpen ? "chevron-open" : ""}`}
+                  />
                 </button>
                 {userMenuOpen && (
                   <div className="user-dropdown">
@@ -463,16 +565,73 @@ export default function NavBar() {
                       </div>
                     </div>
                     <div style={{ padding: "6px 0" }}>
-                      <NavLink to="/alumni/profile" onClick={() => setUserMenuOpen(false)} className="ud-item">
-                        <User size={14} /> My Profile
-                      </NavLink>
-                      <NavLink to="/alumni/donations" onClick={() => setUserMenuOpen(false)} className="ud-item">
-                        💳 My Donations
-                      </NavLink>
-                      {user.isAdmin && (
-                        <NavLink to="/admin/dashboard" onClick={() => setUserMenuOpen(false)} className="ud-item">
-                          <LayoutDashboard size={14} style={{ color: "var(--gold)" }} /> Admin Dashboard
-                        </NavLink>
+                      {user.role === "alumni" && (
+                        <>
+                          <NavLink
+                            to="/alumni/dashboard"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <LayoutDashboardIcon size={14} />
+                            Dashboard
+                          </NavLink>
+
+                          <NavLink
+                            to="/alumni/profile"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <User size={14} />
+                            My Profile
+                          </NavLink>
+
+                          <NavLink
+                            to="/alumni/donations"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <Heart size={14} />
+                            My Donations
+                          </NavLink>
+                        </>
+                      )}
+                      {(user.role === "admin" ||
+                        user.role === "superadmin") && (
+                        <>
+                          <div className="ud-divider" />
+                          <NavLink
+                            to="/admin/dashboard"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <LayoutDashboard size={14} />
+                            Admin Dashboard
+                          </NavLink>
+                          <NavLink
+                            to="/admin/events"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <Calendar size={14} />
+                            Manage Events
+                          </NavLink>
+                          <NavLink
+                            to="/admin/users"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <Users size={14} />
+                            Alumni Management
+                          </NavLink>
+                          <NavLink
+                            to="/admin/reports"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="ud-item"
+                          >
+                            <FileText size={14} />
+                            Reports
+                          </NavLink>
+                        </>
                       )}
                       <div className="ud-divider" />
                       <button onClick={handleLogout} className="ud-item danger">
@@ -484,14 +643,22 @@ export default function NavBar() {
               </div>
             ) : (
               <>
-                <Link to="/alumni/login" className="btn-ghost-nav">Sign In</Link>
-                <Link to="/donate" className="btn-gold-nav">Donate</Link>
+                <Link to="/alumni/login" className="btn-ghost-nav">
+                  Sign In
+                </Link>
+                <Link to="/donate" className="btn-gold-nav">
+                  Donate
+                </Link>
               </>
             )}
           </div>
 
           {/* HAMBURGER */}
-          <button className="ham-btn" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+          <button
+            className="ham-btn"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -514,10 +681,19 @@ export default function NavBar() {
                   </button>
                   <div
                     className="m-sub"
-                    style={{ maxHeight: isMobileDropdownOpen(item.label) ? "300px" : "0" }}
+                    style={{
+                      maxHeight: isMobileDropdownOpen(item.label)
+                        ? "300px"
+                        : "0",
+                    }}
                   >
                     {item.submenu.map((sub) => (
-                      <NavLink key={sub.path} to={sub.path} onClick={closeAll} className="m-sub-link">
+                      <NavLink
+                        key={sub.path}
+                        to={sub.path}
+                        onClick={closeAll}
+                        className="m-sub-link"
+                      >
                         {sub.label}
                       </NavLink>
                     ))}
@@ -528,11 +704,13 @@ export default function NavBar() {
                   key={item.path}
                   to={item.path}
                   onClick={closeAll}
-                  className={({ isActive }) => `m-link${isActive ? " m-active" : ""}`}
+                  className={({ isActive }) =>
+                    `m-link${isActive ? " m-active" : ""}`
+                  }
                 >
                   {item.label}
                 </NavLink>
-              )
+              ),
             )}
 
             {user ? (
@@ -543,27 +721,53 @@ export default function NavBar() {
                     {user.firstName} {user.lastName}
                   </div>
                 </div>
-                <NavLink to="/alumni/profile" onClick={closeAll} className="m-link">
+                <NavLink
+                  to="/alumni/profile"
+                  onClick={closeAll}
+                  className="m-link"
+                >
                   <User size={15} /> My Profile
                 </NavLink>
-                <NavLink to="/alumni/donations" onClick={closeAll} className="m-link">
+                <NavLink
+                  to="/alumni/donations"
+                  onClick={closeAll}
+                  className="m-link"
+                >
                   💳 My Donations
                 </NavLink>
                 {user.isAdmin && (
-                  <NavLink to="/admin/dashboard" onClick={closeAll} className="m-link">
+                  <NavLink
+                    to="/admin/dashboard"
+                    onClick={closeAll}
+                    className="m-link"
+                  >
                     <LayoutDashboard size={15} /> Admin Dashboard
                   </NavLink>
                 )}
                 <div className="m-btn-row">
-                  <button onClick={() => { handleLogout(); closeAll(); }} className="m-btn-danger">
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      closeAll();
+                    }}
+                    className="m-btn-danger"
+                  >
                     <LogOut size={15} /> Sign Out
                   </button>
                 </div>
               </>
             ) : (
               <div className="m-btn-row">
-                <Link to="/alumni/login" onClick={closeAll} className="m-btn-ghost">Alumni Login</Link>
-                <Link to="/donate" onClick={closeAll} className="m-btn-gold">Donate Now</Link>
+                <Link
+                  to="/alumni/login"
+                  onClick={closeAll}
+                  className="m-btn-ghost"
+                >
+                  Alumni Login
+                </Link>
+                <Link to="/donate" onClick={closeAll} className="m-btn-gold">
+                  Donate Now
+                </Link>
               </div>
             )}
           </div>
