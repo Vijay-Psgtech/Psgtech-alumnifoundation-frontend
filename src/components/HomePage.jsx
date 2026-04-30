@@ -7,6 +7,8 @@ import Vision from "./Vision";
 import Values from "./Values";
 import Mission from "./Mission";
 import { useAuth } from "../context/AuthContext";
+import usePageTitle from "../hooks/usePageTitle";
+
 
 const features = [
   {emoji:"👥",title:"Alumni Directory",desc:"Browse and connect with global alumni"},
@@ -17,6 +19,7 @@ const features = [
 
 const HomePage = () => {
   const { user } = useAuth();
+  usePageTitle("Home");
   
 
   return (

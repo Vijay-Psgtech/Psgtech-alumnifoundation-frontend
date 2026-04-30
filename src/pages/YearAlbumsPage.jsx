@@ -3,7 +3,43 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Camera, Image, ChevronRight, X, ChevronLeft, Sparkles, Film, Star } from "lucide-react";
-import { useData } from "../context/dataConstants";
+import { albumsAPI, API_BASE } from "../services/api";
+import usePageTitle from "../hooks/usePageTitle";
+
+const imgUrl = (path= "") => {
+  if (!path) return "";
+  if (typeof path === "string" && /^(https?:)?\/\//.test(path)) return encodeURI(path);
+  return encodeURI(`${API_BASE}/${path.replace(/\\/g, "/")}`);
+};
+
+const normalizeAlbumsData = (payload) => {
+  if (!payload) return {};
+  if (Array.isArray(payload)) {
+    return payload.reduce((acc, album) => {
+      const year = String(
+        album.year ??
+          (album.date ? new Date(album.date).getFullYear() : "unknown"),
+      );
+      const photos =
+        parseInt(album.photos, 10) ||
+        (Array.isArray(album.images) ? album.images.length : 0) ||
+        0;
+
+      if (!acc[year]) {
+        acc[year] = {
+          coverColor: album.coverColor || "#667eea",
+          totalPhotos: 0,
+          albums: [],
+        };
+      }
+
+      acc[year].albums.push(album);
+      acc[year].totalPhotos += photos;
+      return acc;
+    }, {});
+  }
+  return payload;
+};
 
 const generatePlaceholderPhotos = (count, accent, gradient) =>
   Array.from({ length: Math.min(count, 12) }, (_, i) => ({ id: i, gradient: gradient || `linear-gradient(135deg, ${accent}20, ${accent}08)`, label: `Photo ${i + 1}` }));
@@ -17,10 +53,14 @@ const AlbumCard = ({ album, onClick, idx }) => (
     onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 16px rgba(15,27,53,0.06)"; }}
   >
     {/* Cover */}
-    <div style={{ height: "200px", background: `linear-gradient(135deg, ${album.accent}18, ${album.accent}06)`, position: "relative", overflow: "hidden" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "2px", height: "100%", opacity: 0.5 }}>
-        {[...Array(4)].map((_, i) => <div key={i} style={{ background: `${album.accent}${15 + i * 8}` }} />)}
-      </div>
+    <div style={{
+      height: "200px",
+      position: "relative",
+      overflow: "hidden",
+      background: (album.coverImage || album.images?.[0])
+        ? `linear-gradient(180deg, rgba(15,27,53,0.18), rgba(15,27,53,0.02)), url("${imgUrl(album.coverImage || album.images[0])}") center/cover no-repeat`
+        : `linear-gradient(135deg, ${album.accent}18, ${album.accent}06)`,
+    }}>
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
           <Camera size={32} color={album.accent} style={{ opacity: 0.7 }} />
@@ -51,7 +91,13 @@ const AlbumCard = ({ album, onClick, idx }) => (
 
 const LightboxModal = ({ album, onClose }) => {
   const [currentPhoto, setCurrentPhoto] = useState(0);
-  const photos = generatePlaceholderPhotos(album.photos, album.accent, null);
+  const photos = Array.isArray(album.images) && album.images.length
+    ? album.images.map((path, i) => ({
+        id: i,
+        src: imgUrl(path),
+        label: `Photo ${i + 1}`,
+      }))
+    : generatePlaceholderPhotos(album.photos, album.accent, null);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -72,11 +118,26 @@ const LightboxModal = ({ album, onClose }) => {
           <ChevronLeft size={20} />
         </button>
         <motion.div key={currentPhoto} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.2 }}
-          style={{ width: "100%", maxWidth: "800px", height: "460px", borderRadius: "20px", background: photos[currentPhoto]?.gradient, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${album.accent}20`, boxShadow: "0 8px 40px rgba(15,27,53,0.1)" }}>
-          <div style={{ textAlign: "center" }}>
-            <Camera size={48} color={album.accent} style={{ opacity: 0.3 }} />
-            <div style={{ color: album.accent, marginTop: "12px", fontFamily: "'DM Mono', monospace", fontSize: "12px", opacity: 0.5 }}>{photos[currentPhoto]?.label}</div>
-          </div>
+          style={{
+            width: "100%",
+            maxWidth: "800px",
+            height: "460px",
+            borderRadius: "20px",
+            background: photos[currentPhoto]?.src
+              ? `url("${photos[currentPhoto].src}") center/cover no-repeat`
+              : photos[currentPhoto]?.gradient,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: `1px solid ${album.accent}20`,
+            boxShadow: "0 8px 40px rgba(15,27,53,0.1)",
+          }}>
+          {!photos[currentPhoto]?.src && (
+            <div style={{ textAlign: "center" }}>
+              <Camera size={48} color={album.accent} style={{ opacity: 0.3 }} />
+              <div style={{ color: album.accent, marginTop: "12px", fontFamily: "'DM Mono', monospace", fontSize: "12px", opacity: 0.5 }}>{photos[currentPhoto]?.label}</div>
+            </div>
+          )}
         </motion.div>
         <button onClick={() => setCurrentPhoto(Math.min(photos.length - 1, currentPhoto + 1))} style={{ position: "absolute", right: "20px", background: "#fff", border: "1px solid rgba(15,27,53,0.1)", borderRadius: "50%", width: "44px", height: "44px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 16px rgba(15,27,53,0.1)" }}>
           <ChevronRight size={20} />
@@ -85,7 +146,19 @@ const LightboxModal = ({ album, onClose }) => {
 
       <div style={{ display: "flex", gap: "8px", padding: "16px 32px", overflowX: "auto", borderTop: "1px solid rgba(15,27,53,0.08)", background: "#fff" }}>
         {photos.map((p, i) => (
-          <div key={i} onClick={() => setCurrentPhoto(i)} style={{ width: "72px", height: "54px", borderRadius: "8px", flexShrink: 0, cursor: "pointer", background: p.gradient, border: i === currentPhoto ? `2px solid ${album.accent}` : "2px solid transparent", transition: "all 0.2s", opacity: i === currentPhoto ? 1 : 0.5 }} />
+          <div key={i} onClick={() => setCurrentPhoto(i)} style={{
+            width: "72px",
+            height: "54px",
+            borderRadius: "8px",
+            flexShrink: 0,
+            cursor: "pointer",
+            background: p.src
+              ? `url("${p.src}") center/cover no-repeat`
+              : p.gradient,
+            border: i === currentPhoto ? `2px solid ${album.accent}` : "2px solid transparent",
+            transition: "all 0.2s",
+            opacity: i === currentPhoto ? 1 : 0.5,
+          }} />
         ))}
       </div>
     </motion.div>
@@ -93,14 +166,34 @@ const LightboxModal = ({ album, onClose }) => {
 };
 
 const YearAlbumsPage = () => {
-  const { albumsData } = useData(); // ✅ live from DataContext
-
-  const years = Object.keys(albumsData).sort((a, b) => b - a);
-  const [selectedYear, setSelectedYear] = useState(years[0]);
+  const [albumsData, setAlbumsData] = useState({});
+  const [selectedYear, setSelectedYear] = useState("");
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  usePageTitle("Year Albums & Memories");
 
-  // Re-compute when albumsData changes
+  React.useEffect(() => {
+    albumsAPI.getAll().then((res) => {
+      const payload = res.data?.data ?? res.data;
+      const normalized = normalizeAlbumsData(payload);
+      setAlbumsData(normalized);
+      const yearList = Object.keys(normalized).sort((a, b) => b - a);
+      if (yearList.length) {
+        setSelectedYear(yearList[0]);
+      }
+    });
+  }, []);
+
+  const years = Object.keys(albumsData).sort((a, b) => b - a);
+
+  React.useEffect(() => {
+    if (!selectedYear && years.length) {
+      setSelectedYear(years[0]);
+    } else if (selectedYear && !albumsData[selectedYear] && years.length) {
+      setSelectedYear(years[0]);
+    }
+  }, [albumsData, years, selectedYear]);
+
   const yearData = albumsData[selectedYear];
   const filteredAlbums = (yearData?.albums || []).filter(a =>
     a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -109,10 +202,6 @@ const YearAlbumsPage = () => {
 
   const totalPhotos = Object.values(albumsData).reduce((acc, y) => acc + (y.totalPhotos || 0), 0);
   const totalEvents = Object.values(albumsData).reduce((acc, y) => acc + (y.totalEvents || 0), 0);
-
-  // If selected year was deleted, fall back
-  const safeYear = albumsData[selectedYear] ? selectedYear : years[0];
-  if (safeYear !== selectedYear && years.length > 0) setSelectedYear(safeYear);
 
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(160deg, #faf7f2 0%, #f3ede3 50%, #faf7f2 100%)", fontFamily: "'Inter', sans-serif" }}>

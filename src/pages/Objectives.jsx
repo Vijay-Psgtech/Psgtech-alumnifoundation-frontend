@@ -1,9 +1,11 @@
 // frontend/src/pages/ObjectivesPage.jsx
-import React from "react";
+import React, { use } from "react";
 import { motion } from "framer-motion";
 import { objectivesList, principles } from "../content/data/ObjectivesData.js";
+import usePageTitle from "../hooks/usePageTitle.jsx";
 
 const ObjectivesPage = () => {
+  usePageTitle("Objectives");
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

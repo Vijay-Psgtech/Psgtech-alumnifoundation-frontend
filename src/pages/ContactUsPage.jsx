@@ -2,8 +2,10 @@
 import React, { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import usePageTitle from "../hooks/usePageTitle";
 
 const ContactUsPage = () => {
+  usePageTitle("Contact Us");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
