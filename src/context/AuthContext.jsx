@@ -4,7 +4,13 @@
 // login() receives fresh user data from the server response body.
 // logout() calls POST /api/auth/logout so the server clears the cookie.
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 const AuthContext = createContext(null);
 
@@ -88,7 +94,9 @@ export function AuthProvider({ children }) {
   }, [logout]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, refreshUser, authLoading }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, refreshUser, authLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );
