@@ -1,9 +1,11 @@
 // frontend/src/pages/OfficeBearersPage.jsx
-import React from "react";
+import React, { use } from "react";
 import { motion } from "framer-motion";
 import { President, VicePresidents } from "../content/data/OfficeBearersData.js";
+import usePageTitle from "../hooks/usePageTitle";
 
 const OfficeBearersPage = () => {
+  usePageTitle("Office Bearers");
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

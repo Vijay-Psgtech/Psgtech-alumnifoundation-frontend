@@ -2,8 +2,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Patrons } from "../content/data/PatronsData.js";
+import usePageTitle from "../hooks/usePageTitle";
 
 const PatronsPage = () => {
+  usePageTitle("Patrons");
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

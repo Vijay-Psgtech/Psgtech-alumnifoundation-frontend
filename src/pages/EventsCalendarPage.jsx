@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ArrowLeft, Users, Clock, MapPin, Sparkles } from "lucide-react";
 import { eventsAPI } from "../services/api";
+import usePageTitle from "../hooks/usePageTitle";
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const EventsCalendarPage = () => {
   const [events, setEvents] = useState([]);
+  usePageTitle("Events Calendar");
 
   React.useEffect(() => {
     eventsAPI.getAll().then((res) => setEvents(res.data.data));
