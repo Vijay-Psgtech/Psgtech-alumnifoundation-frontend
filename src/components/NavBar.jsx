@@ -61,13 +61,15 @@ export default function NavBar() {
         ],
       },
       {
-      label: "Find Alumni",
-      submenu: [
-        user ? { label: "Alumni Directory", path: "/alumni/directory" } : null,
-        user ? { label: "Alumni Map", path: "/alumni/map" } : null,
-        user ? { label: "Alumni Chapters", path: "/alumni/chapters" } : null
-      ].filter(Boolean),
-    },
+        label: "Find Alumni",
+        submenu: [
+          user
+            ? { label: "Alumni Directory", path: "/alumni/directory" }
+            : null,
+          user ? { label: "Alumni Map", path: "/alumni/map" } : null,
+          user ? { label: "Alumni Chapters", path: "/alumni/chapters" } : null,
+        ].filter(Boolean),
+      },
 
       { label: "Contact", path: "/contact" },
     ];
@@ -87,42 +89,6 @@ export default function NavBar() {
 
     return baseItems;
   };
-
-  // ✅ FIXED: All items are proper objects — no raw JSX in array
-  // const navItems = [
-  //   { label: "Home", path: "/" },
-  //   {
-  //     label: "About",
-  //     submenu: [
-  //       { label: "Overview", path: "/about" },
-  //       { label: "Patrons", path: "/patrons" },
-  //       { label: "Office Bearers", path: "/officebearers" },
-  //     ],
-  //   },
-  //   { label: "Objectives", path: "/objectives" },
-  //   { label: "Newsletter", path: "/newsletter" },
-  //   {
-  //     label: "Events",
-  //     submenu: [
-  //       { label: "All Events", path: "/events" },
-  //       { label: "Calendar", path: "/events/calendar" },
-  //       { label: "Year Albums", path: "/events/albums" },
-  //     ],
-  //   },
-  //   { label: "Contact", path: "/contact" },
-  //   {
-  //     label: "Alumni",
-  //     submenu: [
-  //       user ? { label: "Directory", path: "/alumni/directory" } : null,
-  //       user ? { label: "Alumni Map", path: "/alumni/map" } : null,
-  //       user ? { label: "My Profile", path: "/alumni/profile" } : null,
-  //       user ? { label: "My Donations", path: "/alumni/donations" } : null,
-  //       user?.isAdmin
-  //         ? { label: "Admin Dashboard", path: "/admin/dashboard" }
-  //         : null,
-  //     ].filter(Boolean),
-  //   },
-  // ];
 
   const navItems = getNavItems();
 
