@@ -3,13 +3,17 @@ import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ArrowLeft, Users, Clock, MapPin, Sparkles } from "lucide-react";
-import { useData, CATEGORY_COLORS } from "../context/dataConstants";
+import { eventsAPI } from "../services/api";
 
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const EventsCalendarPage = () => {
-  const { events } = useData(); // ✅ live from DataContext
+  const [events, setEvents] = useState([]);
+
+  React.useEffect(() => {
+    eventsAPI.getAll().then((res) => setEvents(res.data.data));
+  }, []);
 
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -24,7 +28,7 @@ const EventsCalendarPage = () => {
   const daysInPrevMonth = new Date(year, month, 0).getDate();
 
   const getDateStr = (y, m, d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-  const getEventsForDate = (dateStr) => events.filter(e => e.date === dateStr);
+  const getEventsForDate = (dateStr) => events.filter(e => new Date(e.date).toISOString().slice(0, 10) === dateStr);
 
   const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
   const cells = Array.from({ length: totalCells }, (_, i) => {
@@ -149,7 +153,7 @@ const EventsCalendarPage = () => {
                       }}>{cell.day}</div>
                       <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                         {dayEvents.slice(0, 2).map((ev, i) => {
-                          const cc = CATEGORY_COLORS[ev.category] || "#b8882a";
+                          const cc =  "#b8882a";
                           return (
                             <div key={i} style={{ background: `${cc}15`, border: `1px solid ${cc}30`, borderRadius: "4px", padding: "2px 5px", fontSize: "9px", color: cc, fontWeight: "700", fontFamily: "'DM Mono', monospace", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
                               {ev.title.slice(0, 14)}{ev.title.length > 14 ? "…" : ""}
@@ -173,7 +177,7 @@ const EventsCalendarPage = () => {
                     Events on {new Date(selectedDate + "T00:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
                   </div>
                   {selectedEvents.map((evt, i) => {
-                    const cc = CATEGORY_COLORS[evt.category] || "#b8882a";
+                    const cc =  "#b8882a";
                     return (
                       <div key={i} style={{ background: "rgba(15,27,53,0.02)", border: "1px solid rgba(15,27,53,0.08)", borderRadius: "12px", padding: "14px", marginBottom: "10px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
@@ -199,7 +203,7 @@ const EventsCalendarPage = () => {
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {monthEvents.map(evt => {
-                    const cc = CATEGORY_COLORS[evt.category] || "#b8882a";
+                    const cc =  "#b8882a";
                     const d = new Date(evt.date);
                     return (
                       <Link key={evt._id} to={`/events/${evt._id}`} style={{ display: "flex", alignItems: "center", gap: "16px", padding: "14px 16px", borderRadius: "12px", background: "rgba(15,27,53,0.02)", border: "1px solid rgba(15,27,53,0.07)", textDecoration: "none", transition: "all 0.2s" }}
@@ -251,7 +255,7 @@ const EventsCalendarPage = () => {
                     <span style={{ color: "#9ca3af", fontSize: "13px", fontFamily: "'DM Mono', monospace" }}>({monthEvts.length})</span>
                   </div>
                   {monthEvts.map((evt, i) => {
-                    const cc = CATEGORY_COLORS[evt.category] || "#b8882a";
+                    const cc =  "#b8882a";
                     const d = new Date(evt.date);
                     return (
                       <motion.div key={evt._id} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>

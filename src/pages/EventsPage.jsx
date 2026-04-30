@@ -1,9 +1,11 @@
 // frontend/src/pages/EventsPage.jsx — reads from DataContext (live sync with admin)
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, MapPin, Users, Search, ChevronRight, Sparkles, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useData, CATEGORY_COLORS } from "../context/dataConstants";
+import { eventsAPI } from "../services/api";
+import usePageTitle from "../hooks/usePageTitle";
+
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -17,7 +19,8 @@ const formatDate = (dateString) => {
 
 const EventCard = ({ event, idx }) => {
   const dateInfo = formatDate(event.date);
-  const catColor = CATEGORY_COLORS[event.category] || "#b8882a";
+  //const catColor = CATEGORY_COLORS[event.category] || "#b8882a";
+  const catColor = "#b8882a";
   const isUpcoming = event.status === "upcoming";
 
   return (
@@ -90,9 +93,27 @@ const EventCard = ({ event, idx }) => {
 };
 
 const EventsPage = () => {
-  const { events } = useData(); // ✅ live from DataContext
+  const [events, setEvents] = useState([]);
   const [filter, setFilter] = useState("upcoming");
   const [searchTerm, setSearchTerm] = useState("");
+  usePageTitle("Events");
+
+  // ✅ Fetch events on mount
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  // ✅ Fetch all events from API
+  const fetchEvents = async () => {
+    try {
+      const response = await eventsAPI.getAll();
+      setEvents(response.data.data || []);
+    } catch (err) {
+      console.error("Failed to fetch events:", err);
+
+      setEvents([]);
+    }
+  };
 
   const filteredEvents = events.filter(e => {
     const matchFilter = e.status === filter;

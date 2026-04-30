@@ -3,20 +3,24 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, MapPin, Users, Clock, Calendar, Share2, BookmarkPlus, ChevronRight, CheckCircle, Award, Mic, Coffee, Star } from "lucide-react";
-import { useData, CATEGORY_COLORS } from "../context/dataConstants";
+import { eventsAPI, API_BASE } from "../services/api";
 
 const ICON_MAP = { Coffee, Mic, Award, Users, Clock, Star };
 
 const EventDetailPage = () => {
   const { id } = useParams();
-  const { events } = useData(); // ✅ live from DataContext
+  const [events, setEvents] = useState([]);
 
-  const event = events.find(e => e._id === id) || events[0];
+   React.useEffect(() => {
+    eventsAPI.getById(id).then((res) => setEvents([res.data.data]));
+  }, [id]);
+
+  const event = events[0];
   const [registered, setRegistered] = useState(false);
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
 
-  const catColor = CATEGORY_COLORS[event?.category] || "#b8882a";
+  const catColor = "#b8882a";
   const isUpcoming = event?.status === "upcoming";
   const date = new Date(event?.date);
   const dateFormatted = date.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
@@ -64,6 +68,22 @@ const EventDetailPage = () => {
               {isUpcoming ? "● UPCOMING" : "✓ COMPLETED"}
             </span>
           </div>
+
+          {/* Image */}
+          {event.imageUrl && (
+            <img
+              src={`${API_BASE}/${event.imageUrl}`}
+              alt={event.title}
+              style={{
+                width: "100%",
+                height: "400px",
+                objectFit: "cover",
+                borderRadius: "12px",
+                marginBottom: "32px",
+              }}
+            />
+          )}
+          
           <h1 style={{ fontSize: "clamp(24px, 4vw, 48px)", fontWeight: "900", color: "#0f1b35", fontFamily: "'Playfair Display', serif", lineHeight: 1.15, maxWidth: "700px", marginBottom: "24px" }}>{event.title}</h1>
           <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
             {[{ Icon: Calendar, label: dateFormatted }, { Icon: Clock, label: event.time || "TBD" }, { Icon: MapPin, label: event.venue?.split(",")[0] }, { Icon: Users, label: `${event.attendees} ${isUpcoming ? "Expected" : "Attended"}` }].map(({ Icon, label }, i) => (
