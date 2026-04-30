@@ -66,7 +66,8 @@ const PatronsPage = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
           >
-            Meet the distinguished leaders and mentors who guide PSG Tech's mission and inspire generations of students.
+            Meet the distinguished leaders and mentors who guide PSG Tech's
+            mission and inspire generations of students.
           </motion.p>
         </motion.div>
 
@@ -144,7 +145,10 @@ const PatronsPage = () => {
             Guiding PSG Tech's Future
           </h3>
           <p className="text-lg text-slate-700 leading-relaxed">
-            Our patrons embody the spirit of excellence, innovation, and service that defines PSG Tech. Their unwavering support and mentorship have been instrumental in shaping the institution's legacy and vision for the future.
+            Our patrons embody the spirit of excellence, innovation, and service
+            that defines PSG Tech. Their unwavering support and mentorship have
+            been instrumental in shaping the institution's legacy and vision for
+            the future.
           </p>
         </motion.div>
       </div>

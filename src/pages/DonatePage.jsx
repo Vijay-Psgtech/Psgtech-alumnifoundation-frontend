@@ -10,8 +10,15 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Heart, GraduationCap, FlaskConical, Building2, Users,
-  ShieldCheck, ChevronRight, AlertCircle, CheckCircle2,
+  Heart,
+  GraduationCap,
+  FlaskConical,
+  Building2,
+  Users,
+  ShieldCheck,
+  ChevronRight,
+  AlertCircle,
+  CheckCircle2,
   Sparkles,
 } from "lucide-react";
 import { donationAPI } from "../services/api";
@@ -443,65 +450,70 @@ const G = `
 const MIN_INR = 5000;
 const MAX_INR = 25000;
 
-const PAN_REGEX     = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 const AADHAAR_REGEX = /^[0-9]{12}$/;
 
 const CAUSES = [
   {
-    id: "scholarship", icon: GraduationCap,
+    id: "scholarship",
+    icon: GraduationCap,
     title: "Student Scholarships",
     desc: "Fund merit & need-based aid for deserving students.",
     badge: "High need",
     impact: {
-      5000:  "Cover one student's exam fees for a semester",
+      5000: "Cover one student's exam fees for a semester",
       10000: "Fund a semester's books & study materials",
       15000: "Sponsor one month of tuition for a student",
       25000: "Full semester scholarship for one student",
     },
   },
   {
-    id: "research", icon: FlaskConical,
+    id: "research",
+    icon: FlaskConical,
     title: "Research Initiatives",
     desc: "Fuel cutting-edge projects across disciplines.",
     badge: null,
     impact: {
-      5000:  "Purchase lab consumables for a research project",
+      5000: "Purchase lab consumables for a research project",
       10000: "Sponsor a student researcher for a month",
       15000: "Equip part of a research workstation",
       25000: "Fund an end-to-end research project cycle",
     },
   },
   {
-    id: "infrastructure", icon: Building2,
+    id: "infrastructure",
+    icon: Building2,
     title: "Campus Infrastructure",
     desc: "Renovate labs, halls, libraries & sports facilities.",
     badge: null,
     impact: {
-      5000:  "Fund a library book collection",
+      5000: "Fund a library book collection",
       10000: "Sponsor classroom technology upgrade",
       15000: "Renovate a seminar room partition",
       25000: "Equip an entire computer lab station",
     },
   },
   {
-    id: "wellness", icon: Heart,
+    id: "wellness",
+    icon: Heart,
     title: "Student Wellness",
     desc: "Support mental health, clubs & campus life.",
     badge: "New",
     impact: {
-      5000:  "Fund a mental health session for 5 students",
+      5000: "Fund a mental health session for 5 students",
       10000: "Sponsor a full student club activity",
       15000: "Run a wellness workshop series",
       25000: "Run a full-semester wellness programme",
     },
   },
   {
-    id: "alumni_connect", icon: Users,
+    id: "alumni_connect",
+    icon: Users,
     title: "Alumni Connect",
     desc: "Build bridges between graduates and the institute.",
     badge: null,
     impact: {
-      5000:  "Sponsor a virtual mentorship session",
+      5000: "Sponsor a virtual mentorship session",
       10000: "Support an alumni networking event",
       15000: "Fund a mentorship programme for 10 students",
       25000: "Establish a full alumni mentoring series",
@@ -511,7 +523,7 @@ const CAUSES = [
 
 // ✅ Updated presets: ₹5K – ₹25K only
 const INR_PRESETS = [
-  { amount: 5000,  label: "₹5,000"  },
+  { amount: 5000, label: "₹5,000" },
   { amount: 10000, label: "₹10,000" },
   { amount: 15000, label: "₹15,000" },
   { amount: 25000, label: "₹25,000" },
@@ -523,31 +535,37 @@ const STEPS = ["Choose Cause", "Donation Details", "Confirm & Pay"];
    ANIMATION VARIANTS
 ═══════════════════════════════════════════════════════ */
 const fadeUp = (delay = 0) => ({
-  hidden:  { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay } },
+  hidden: { opacity: 0, y: 22 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut", delay },
+  },
 });
 
 const slideDownForm = {
-  hidden:  { opacity: 0, y: -40 },
+  hidden: { opacity: 0, y: -40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
-  exit:    { opacity: 0, y: -40, transition: { duration: 0.3 } },
+  exit: { opacity: 0, y: -40, transition: { duration: 0.3 } },
 };
 
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 /* ═══════════════════════════════════════════════════════
    MAIN COMPONENT
 ═══════════════════════════════════════════════════════ */
 const DonatePage = () => {
-
   /* ── form state ── */
-  const [step, setStep]       = useState(1);
-  const [cause, setCause]     = useState("scholarship");
-  const [amount, setAmount]   = useState("");
-  const [name, setName]       = useState("");
-  const [email, setEmail]     = useState("");
-  const [phone, setPhone]     = useState("");
-  const [pan, setPan]         = useState("");
+  const [step, setStep] = useState(1);
+  const [cause, setCause] = useState("scholarship");
+  const [amount, setAmount] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [pan, setPan] = useState("");
   const [aadhaar, setAadhaar] = useState("");
   const [message, setMessage] = useState("");
   const [anonymous, setAnonymous] = useState(false);
@@ -558,16 +576,16 @@ const DonatePage = () => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   /* ── async state ── */
-  const [loading, setLoading]     = useState(false);
-  const [error, setError]         = useState("");
-  const [success, setSuccess]     = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [statsLoading, setStatsLoading] = useState(true);
   const [liveStats, setLiveStats] = useState(null);
 
   /* ── derived ── */
-  const feeAmt   = amount ? +(parseFloat(amount) * 0.02).toFixed(2) : 0;
+  const feeAmt = amount ? +(parseFloat(amount) * 0.02).toFixed(2) : 0;
   const totalAmt = amount ? +(parseFloat(amount) * 1.02).toFixed(2) : 0;
-  const activeCause = CAUSES.find(c => c.id === cause);
+  const activeCause = CAUSES.find((c) => c.id === cause);
 
   /* ── load live stats ── */
   useEffect(() => {
@@ -585,10 +603,16 @@ const DonatePage = () => {
 
   /* ── PAN input handler: uppercase + restrict chars ── */
   const handlePanChange = (e) => {
-    const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10);
+    const val = e.target.value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 10);
     setPan(val);
     if (fieldErrors.pan) {
-      setFieldErrors(p => ({ ...p, pan: PAN_REGEX.test(val) ? "" : "Invalid PAN format (e.g. ABCDE1234F)" }));
+      setFieldErrors((p) => ({
+        ...p,
+        pan: PAN_REGEX.test(val) ? "" : "Invalid PAN format (e.g. ABCDE1234F)",
+      }));
     }
   };
 
@@ -597,7 +621,12 @@ const DonatePage = () => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 12);
     setAadhaar(val);
     if (fieldErrors.aadhaar) {
-      setFieldErrors(p => ({ ...p, aadhaar: AADHAAR_REGEX.test(val) ? "" : "Aadhaar must be exactly 12 digits" }));
+      setFieldErrors((p) => ({
+        ...p,
+        aadhaar: AADHAAR_REGEX.test(val)
+          ? ""
+          : "Aadhaar must be exactly 12 digits",
+      }));
     }
   };
 
@@ -617,7 +646,7 @@ const DonatePage = () => {
 
     // Donor info
     if (!anonymous) {
-      if (!name.trim())  errs.name  = "Full name is required.";
+      if (!name.trim()) errs.name = "Full name is required.";
       if (!email.trim()) {
         errs.email = "Email address is required.";
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -650,104 +679,156 @@ const DonatePage = () => {
 
   /* ── Razorpay handler ── */
   const handleRazorpay = useCallback(async () => {
-    setLoading(true); setError("");
+    setLoading(true);
+    setError("");
     try {
       const payload = {
-        amount:        parseFloat(amount),
-        currency:      "INR",
+        amount: parseFloat(amount),
+        currency: "INR",
         paymentMethod: "razorpay",
         cause,
-        isAnonymous:   anonymous,
-        message:       message || "",
-        donorName:     anonymous ? "Anonymous" : name,
-        donorEmail:    anonymous ? "anonymous@psgtech.ac.in" : email,
-        donorPhone:    phone || "",
-        pan:           pan.toUpperCase(),
-        aadhaar:       aadhaar,
+        isAnonymous: anonymous,
+        message: message || "",
+        donorName: anonymous ? "Anonymous" : name,
+        donorEmail: anonymous ? "anonymous@psgtech.ac.in" : email,
+        donorPhone: phone || "",
+        pan: pan.toUpperCase(),
+        aadhaar: aadhaar,
       };
 
       const res = await donationAPI.create(payload);
-      const { razorpayOrderId, amount: amt, currency: cur, donationId } = res.data;
+      const {
+        razorpayOrderId,
+        amount: amt,
+        currency: cur,
+        donationId,
+      } = res.data;
 
       if (!razorpayOrderId) {
         setError("Failed to create payment order. Please try again.");
-        setLoading(false); return;
+        setLoading(false);
+        return;
       }
 
       const opts = {
-        key:         import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount:      amt,
-        currency:    cur,
-        order_id:    razorpayOrderId,
-        name:        "PSG TECH Alumni Foundation",
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: amt,
+        currency: cur,
+        order_id: razorpayOrderId,
+        name: "PSG TECH Alumni Foundation",
         description: `Joy of Giving — ${activeCause?.title}`,
         handler: async (pr) => {
           try {
             const vr = await donationAPI.verifyRazorpayPayment({
-              razorpay_order_id:   pr.razorpay_order_id,
+              razorpay_order_id: pr.razorpay_order_id,
               razorpay_payment_id: pr.razorpay_payment_id,
-              razorpay_signature:  pr.razorpay_signature,
+              razorpay_signature: pr.razorpay_signature,
               donationId,
             });
             if (vr.data.success) {
               setSuccess(true);
-              setAmount(""); setName(""); setEmail(""); setPhone("");
-              setPan(""); setAadhaar(""); setMessage(""); setStep(1);
+              setAmount("");
+              setName("");
+              setEmail("");
+              setPhone("");
+              setPan("");
+              setAadhaar("");
+              setMessage("");
+              setStep(1);
               setTimeout(() => setSuccess(false), 7000);
-            } else { setError("Payment verification failed. Please contact support."); }
-          } catch { setError("Verification error. Please try again."); }
-          finally  { setLoading(false); }
+            } else {
+              setError("Payment verification failed. Please contact support.");
+            }
+          } catch {
+            setError("Verification error. Please try again.");
+          } finally {
+            setLoading(false);
+          }
         },
-        prefill: { name: anonymous ? "" : name, email: anonymous ? "" : email, contact: phone || "" },
-        notes:   { cause, message, isAnonymous: anonymous },
-        theme:   { color: "#0c1f3f" },
-        modal:   { ondismiss: () => setLoading(false) },
+        prefill: {
+          name: anonymous ? "" : name,
+          email: anonymous ? "" : email,
+          contact: phone || "",
+        },
+        notes: { cause, message, isAnonymous: anonymous },
+        theme: { color: "#0c1f3f" },
+        modal: { ondismiss: () => setLoading(false) },
       };
 
-      const open = () => { const r = new window.Razorpay(opts); r.open(); };
+      const open = () => {
+        const r = new window.Razorpay(opts);
+        r.open();
+      };
       if (typeof window.Razorpay === "undefined") {
         const s = document.createElement("script");
-        s.src     = "https://checkout.razorpay.com/v1/checkout.js";
-        s.onload  = open;
-        s.onerror = () => { setError("Failed to load payment gateway."); setLoading(false); };
+        s.src = "https://checkout.razorpay.com/v1/checkout.js";
+        s.onload = open;
+        s.onerror = () => {
+          setError("Failed to load payment gateway.");
+          setLoading(false);
+        };
         document.head.appendChild(s);
-      } else { open(); }
+      } else {
+        open();
+      }
     } catch (e) {
       setError(e.response?.data?.message || "Payment initiation failed.");
       setLoading(false);
     }
-  }, [amount, cause, anonymous, message, name, email, phone, pan, aadhaar, activeCause]);
+  }, [
+    amount,
+    cause,
+    anonymous,
+    message,
+    name,
+    email,
+    phone,
+    pan,
+    aadhaar,
+    activeCause,
+  ]);
 
   /* ── submit ── */
-  const handleSubmit = useCallback((e) => {
-    if (e && e.preventDefault) e.preventDefault();
-    if (!validate()) return;
-    handleRazorpay();
-  }, [validate, handleRazorpay]);
+  const handleSubmit = useCallback(
+    (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      if (!validate()) return;
+      handleRazorpay();
+    },
+    [validate, handleRazorpay],
+  );
 
   /* ── impact message ── */
   const getImpact = () => {
     if (!amount || parseFloat(amount) < MIN_INR) return null;
     const impacts = activeCause?.impact;
     if (!impacts) return null;
-    const thresholds = Object.keys(impacts).map(Number).sort((a, b) => b - a);
-    const matched = thresholds.find(t => parseFloat(amount) >= t);
+    const thresholds = Object.keys(impacts)
+      .map(Number)
+      .sort((a, b) => b - a);
+    const matched = thresholds.find((t) => parseFloat(amount) >= t);
     return matched ? impacts[matched] : null;
   };
 
   /* ── hero stats ── */
   const heroStats = [
     {
-      num:   statsLoading ? null : liveStats?.totalAmountINR
-               ? `₹${(liveStats.totalAmountINR / 1e5).toFixed(1)}L+` : "₹4.2Cr+",
+      num: statsLoading
+        ? null
+        : liveStats?.totalAmountINR
+          ? `₹${(liveStats.totalAmountINR / 1e5).toFixed(1)}L+`
+          : "₹4.2Cr+",
       label: "Raised this year",
     },
     {
-      num:   statsLoading ? null : liveStats?.totalDonations
-               ? `${liveStats.totalDonations}+` : "340+",
+      num: statsLoading
+        ? null
+        : liveStats?.totalDonations
+          ? `${liveStats.totalDonations}+`
+          : "340+",
       label: "Donations made",
     },
-    { num: "80G",  label: "Tax exemption" },
+    { num: "80G", label: "Tax exemption" },
     { num: "100%", label: "Goes to the cause" },
   ];
 
@@ -758,27 +839,35 @@ const DonatePage = () => {
     <>
       <style>{G}</style>
       <div className="jog-root">
-
         {/* ══ HERO ══════════════════════════════════════════ */}
         <section className="jog-hero">
-          <motion.div className="jog-hero-inner" initial="hidden" animate="visible" variants={stagger}>
+          <motion.div
+            className="jog-hero-inner"
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+          >
             <motion.div variants={fadeUp(0)} className="jog-eyebrow">
               <Sparkles size={11} /> Joy of Giving
             </motion.div>
             <motion.h1 variants={fadeUp(0.08)}>
-              Give the <em>gift</em> of<br />education & opportunity.
+              Give the <em>gift</em> of
+              <br />
+              education & opportunity.
             </motion.h1>
             <motion.p variants={fadeUp(0.16)}>
-              Every contribution to PSG TECH Alumni Foundation powers scholarships,
-              research, and infrastructure — shaping tomorrow's leaders today.
+              Every contribution to PSG TECH Alumni Foundation powers
+              scholarships, research, and infrastructure — shaping tomorrow's
+              leaders today.
             </motion.p>
             <motion.div className="jog-stats-bar" variants={fadeUp(0.24)}>
               {heroStats.map((s, i) => (
                 <div className="jog-stat" key={i}>
-                  {statsLoading && !s.num
-                    ? <div className="jog-stat-loading" />
-                    : <div className="jog-stat-num">{s.num}</div>
-                  }
+                  {statsLoading && !s.num ? (
+                    <div className="jog-stat-loading" />
+                  ) : (
+                    <div className="jog-stat-num">{s.num}</div>
+                  )}
                   <div className="jog-stat-label">{s.label}</div>
                 </div>
               ))}
@@ -797,17 +886,21 @@ const DonatePage = () => {
             >
               {STEPS.map((label, i) => {
                 const n = i + 1;
-                const isDone   = step > n;
+                const isDone = step > n;
                 const isActive = step === n;
                 return (
                   <React.Fragment key={label}>
-                    <div className={`jog-prog-step ${isActive ? "active" : ""} ${isDone ? "done" : ""}`}>
+                    <div
+                      className={`jog-prog-step ${isActive ? "active" : ""} ${isDone ? "done" : ""}`}
+                    >
                       <div className="jog-prog-num">
                         {isDone ? <CheckCircle2 size={12} /> : n}
                       </div>
                       <span className="jog-prog-label">{label}</span>
                     </div>
-                    {i < STEPS.length - 1 && <div className="jog-prog-divider" />}
+                    {i < STEPS.length - 1 && (
+                      <div className="jog-prog-divider" />
+                    )}
                   </React.Fragment>
                 );
               })}
@@ -819,27 +912,41 @@ const DonatePage = () => {
         <section className="jog-causes">
           <motion.div
             className="jog-section-hd"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp()}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp()}
           >
             <h2>Choose Your Cause</h2>
             <p>Direct your gift where it matters most to you.</p>
           </motion.div>
           <motion.div
             className="jog-causes-grid"
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
           >
             {CAUSES.map((c) => (
               <motion.div
                 key={c.id}
                 className={`cause-card ${cause === c.id ? "active" : ""}`}
                 variants={fadeUp()}
-                onClick={() => { setCause(c.id); setStep(s => Math.max(s, 2)); }}
+                onClick={() => {
+                  setCause(c.id);
+                  setStep((s) => Math.max(s, 2));
+                }}
               >
-                {cause === c.id
-                  ? <div className="cause-check"><CheckCircle2 size={13} color="white" /></div>
-                  : c.badge && <span className="cause-badge">{c.badge}</span>
-                }
-                <div className="cause-icon"><c.icon size={19} /></div>
+                {cause === c.id ? (
+                  <div className="cause-check">
+                    <CheckCircle2 size={13} color="white" />
+                  </div>
+                ) : (
+                  c.badge && <span className="cause-badge">{c.badge}</span>
+                )}
+                <div className="cause-icon">
+                  <c.icon size={19} />
+                </div>
                 <div className="cause-title">{c.title}</div>
                 <div className="cause-desc">{c.desc}</div>
               </motion.div>
@@ -853,41 +960,61 @@ const DonatePage = () => {
             <motion.section
               className="jog-form-section"
               variants={slideDownForm}
-              initial="hidden" animate="visible" exit="exit"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
             >
               <motion.div
                 className="jog-form-inner"
-                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={stagger}
               >
-
                 {/* ─── LEFT: FORM ─── */}
                 <motion.div className="jog-form-panel" variants={fadeUp()}>
                   <div className="jog-form-top">
                     <h3>Make Your Donation</h3>
-                    <p>Secure payment via Razorpay · INR only · Every rupee reaches the cause.</p>
+                    <p>
+                      Secure payment via Razorpay · INR only · Every rupee
+                      reaches the cause.
+                    </p>
                     <div className="jog-cause-pill">
                       {activeCause && <activeCause.icon size={11} />}
                       {activeCause?.title ?? "General Fund"}
                     </div>
                   </div>
 
-                  <form className="jog-form-body" onSubmit={handleSubmit} noValidate>
-
+                  <form
+                    className="jog-form-body"
+                    onSubmit={handleSubmit}
+                    noValidate
+                  >
                     {/* ── Alerts ── */}
                     <AnimatePresence>
                       {error && (
-                        <motion.div className="alert error"
-                          initial={{ opacity:0, y:-8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }}>
+                        <motion.div
+                          className="alert error"
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                        >
                           <AlertCircle size={15} /> {error}
                         </motion.div>
                       )}
                       {success && (
-                        <motion.div className="alert success"
-                          initial={{ opacity:0, y:-8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }}>
+                        <motion.div
+                          className="alert success"
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                        >
                           <CheckCircle2 size={15} />
                           <span>
-                            <strong>Thank you for your generosity!</strong><br />
-                            Your donation was processed successfully. A receipt and 80G certificate will be sent to your email.
+                            <strong>Thank you for your generosity!</strong>
+                            <br />
+                            Your donation was processed successfully. A receipt
+                            and 80G certificate will be sent to your email.
                           </span>
                         </motion.div>
                       )}
@@ -901,31 +1028,45 @@ const DonatePage = () => {
                       <div className="amount-wrap">
                         <span className="amount-sym">₹</span>
                         <input
-                          id="donate-amount" type="number"
-                          min={MIN_INR} max={MAX_INR} step="100"
+                          id="donate-amount"
+                          type="number"
+                          min={MIN_INR}
+                          max={MAX_INR}
+                          step="100"
                           value={amount}
-                          onChange={e => {
+                          onChange={(e) => {
                             setAmount(e.target.value);
-                            setStep(s => Math.max(s, 2));
-                            if (fieldErrors.amount) setFieldErrors(p => ({ ...p, amount: "" }));
+                            setStep((s) => Math.max(s, 2));
+                            if (fieldErrors.amount)
+                              setFieldErrors((p) => ({ ...p, amount: "" }));
                           }}
                           placeholder="Enter amount (₹5,000 – ₹25,000)"
                           className={`jog-input ${fieldErrors.amount ? "err" : ""}`}
                         />
                       </div>
-                      {fieldErrors.amount
-                        ? <span className="field-err"><AlertCircle size={11} />{fieldErrors.amount}</span>
-                        : <span className="amount-range-badge">Accepted range: ₹5,000 – ₹25,000</span>
-                      }
+                      {fieldErrors.amount ? (
+                        <span className="field-err">
+                          <AlertCircle size={11} />
+                          {fieldErrors.amount}
+                        </span>
+                      ) : (
+                        <span className="amount-range-badge">
+                          Accepted range: ₹5,000 – ₹25,000
+                        </span>
+                      )}
                       <div className="preset-grid">
-                        {INR_PRESETS.map(p => (
-                          <button key={p.amount} type="button"
+                        {INR_PRESETS.map((p) => (
+                          <button
+                            key={p.amount}
+                            type="button"
                             className={`preset-btn ${parseFloat(amount) === p.amount ? "active" : ""}`}
                             onClick={() => {
                               setAmount(p.amount.toString());
-                              setStep(s => Math.max(s, 2));
-                              if (fieldErrors.amount) setFieldErrors(p2 => ({ ...p2, amount: "" }));
-                            }}>
+                              setStep((s) => Math.max(s, 2));
+                              if (fieldErrors.amount)
+                                setFieldErrors((p2) => ({ ...p2, amount: "" }));
+                            }}
+                          >
                             {p.label}
                           </button>
                         ))}
@@ -933,10 +1074,19 @@ const DonatePage = () => {
                     </div>
 
                     {/* ── Anonymous toggle ── */}
-                    <div className="anon-row" onClick={() => setAnonymous(a => !a)}>
-                      <input type="checkbox" id="anon" checked={anonymous} readOnly />
+                    <div
+                      className="anon-row"
+                      onClick={() => setAnonymous((a) => !a)}
+                    >
+                      <input
+                        type="checkbox"
+                        id="anon"
+                        checked={anonymous}
+                        readOnly
+                      />
                       <label htmlFor="anon">
-                        Donate anonymously — your identity won't be publicly displayed
+                        Donate anonymously — your identity won't be publicly
+                        displayed
                       </label>
                     </div>
 
@@ -944,39 +1094,84 @@ const DonatePage = () => {
                     <AnimatePresence>
                       {!anonymous && (
                         <motion.div
-                          initial={{ opacity:0, height:0 }}
-                          animate={{ opacity:1, height:"auto" }}
-                          exit={{ opacity:0, height:0 }}
-                          style={{ overflow:"hidden" }}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          style={{ overflow: "hidden" }}
                         >
-                          <div style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "14px",
+                            }}
+                          >
                             <div className="form-row">
                               <div className="jog-field">
                                 <label className="jog-label" htmlFor="d-name">
                                   Full Name <span>*</span>
                                 </label>
-                                <input id="d-name" type="text" value={name}
-                                  onChange={e => { setName(e.target.value); if (fieldErrors.name) setFieldErrors(p => ({ ...p, name:"" })); }}
+                                <input
+                                  id="d-name"
+                                  type="text"
+                                  value={name}
+                                  onChange={(e) => {
+                                    setName(e.target.value);
+                                    if (fieldErrors.name)
+                                      setFieldErrors((p) => ({
+                                        ...p,
+                                        name: "",
+                                      }));
+                                  }}
                                   placeholder="Your full name"
-                                  className={`jog-input ${fieldErrors.name ? "err" : ""}`} />
-                                {fieldErrors.name && <span className="field-err"><AlertCircle size={11}/>{fieldErrors.name}</span>}
+                                  className={`jog-input ${fieldErrors.name ? "err" : ""}`}
+                                />
+                                {fieldErrors.name && (
+                                  <span className="field-err">
+                                    <AlertCircle size={11} />
+                                    {fieldErrors.name}
+                                  </span>
+                                )}
                               </div>
                               <div className="jog-field">
                                 <label className="jog-label" htmlFor="d-email">
                                   Email Address <span>*</span>
                                 </label>
-                                <input id="d-email" type="email" value={email}
-                                  onChange={e => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors(p => ({ ...p, email:"" })); }}
+                                <input
+                                  id="d-email"
+                                  type="email"
+                                  value={email}
+                                  onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    if (fieldErrors.email)
+                                      setFieldErrors((p) => ({
+                                        ...p,
+                                        email: "",
+                                      }));
+                                  }}
                                   placeholder="you@example.com"
-                                  className={`jog-input ${fieldErrors.email ? "err" : ""}`} />
-                                {fieldErrors.email && <span className="field-err"><AlertCircle size={11}/>{fieldErrors.email}</span>}
+                                  className={`jog-input ${fieldErrors.email ? "err" : ""}`}
+                                />
+                                {fieldErrors.email && (
+                                  <span className="field-err">
+                                    <AlertCircle size={11} />
+                                    {fieldErrors.email}
+                                  </span>
+                                )}
                               </div>
                             </div>
                             <div className="jog-field">
-                              <label className="jog-label" htmlFor="d-phone">Phone Number</label>
-                              <input id="d-phone" type="tel" value={phone}
-                                onChange={e => setPhone(e.target.value)}
-                                placeholder="+91 98765 43210" className="jog-input" />
+                              <label className="jog-label" htmlFor="d-phone">
+                                Phone Number
+                              </label>
+                              <input
+                                id="d-phone"
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="+91 98765 43210"
+                                className="jog-input"
+                              />
                             </div>
                           </div>
                         </motion.div>
@@ -988,20 +1183,33 @@ const DonatePage = () => {
                       <label className="jog-label" htmlFor="d-msg">
                         Message to the Institution
                       </label>
-                      <textarea id="d-msg" value={message}
-                        onChange={e => setMessage(e.target.value)}
+                      <textarea
+                        id="d-msg"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         placeholder="Share your story or motivation for giving…"
-                        className="jog-textarea" />
+                        className="jog-textarea"
+                      />
                     </div>
 
                     {/* ── KYC: PAN + AADHAAR TEXT INPUTS ── */}
-                    <div className="form-divider">KYC for 80G Tax Certificate</div>
+                    <div className="form-divider">
+                      KYC for 80G Tax Certificate
+                    </div>
 
                     <div className="kyc-note">
-                      <ShieldCheck size={13} style={{ flexShrink:0, marginTop:2, color:"var(--gold)" }} />
+                      <ShieldCheck
+                        size={13}
+                        style={{
+                          flexShrink: 0,
+                          marginTop: 2,
+                          color: "var(--gold)",
+                        }}
+                      />
                       <span>
-                        PAN and Aadhaar are required for all donations as per Indian tax regulations (Section 80G).
-                        Your details are encrypted and never shared with third parties.
+                        PAN and Aadhaar are required for all donations as per
+                        Indian tax regulations (Section 80G). Your details are
+                        encrypted and never shared with third parties.
                       </span>
                     </div>
 
@@ -1012,20 +1220,42 @@ const DonatePage = () => {
                           PAN Number <span>*</span>
                         </label>
                         <input
-                          id="d-pan" type="text"
+                          id="d-pan"
+                          type="text"
                           value={pan}
                           onChange={handlePanChange}
                           placeholder="ABCDE1234F"
                           maxLength={10}
                           className={`jog-input ${fieldErrors.pan ? "err" : ""}`}
-                          style={{ textTransform:"uppercase", letterSpacing:"0.1em" }}
+                          style={{
+                            textTransform: "uppercase",
+                            letterSpacing: "0.1em",
+                          }}
                         />
-                        {fieldErrors.pan
-                          ? <span className="field-err"><AlertCircle size={11}/>{fieldErrors.pan}</span>
-                          : pan.length > 0 && PAN_REGEX.test(pan)
-                            ? <span style={{ fontSize:"10.5px", color:"var(--success)" }}>✓ Valid PAN</span>
-                            : <span style={{ fontSize:"10.5px", color:"var(--muted)" }}>Format: AAAAA9999A</span>
-                        }
+                        {fieldErrors.pan ? (
+                          <span className="field-err">
+                            <AlertCircle size={11} />
+                            {fieldErrors.pan}
+                          </span>
+                        ) : pan.length > 0 && PAN_REGEX.test(pan) ? (
+                          <span
+                            style={{
+                              fontSize: "10.5px",
+                              color: "var(--success)",
+                            }}
+                          >
+                            ✓ Valid PAN
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              fontSize: "10.5px",
+                              color: "var(--muted)",
+                            }}
+                          >
+                            Format: AAAAA9999A
+                          </span>
+                        )}
                       </div>
 
                       {/* Aadhaar */}
@@ -1034,30 +1264,43 @@ const DonatePage = () => {
                           Aadhaar Number <span>*</span>
                         </label>
                         <input
-                          id="d-aadhaar" type="text"
+                          id="d-aadhaar"
+                          type="text"
                           inputMode="numeric"
                           value={aadhaar}
                           onChange={handleAadhaarChange}
                           placeholder="12-digit Aadhaar"
                           maxLength={12}
                           className={`jog-input ${fieldErrors.aadhaar ? "err" : ""}`}
-                          style={{ letterSpacing:"0.12em" }}
+                          style={{ letterSpacing: "0.12em" }}
                         />
-                        {fieldErrors.aadhaar
-                          ? <span className="field-err"><AlertCircle size={11}/>{fieldErrors.aadhaar}</span>
-                          : <span style={{ fontSize:"10.5px", color: aadhaar.length === 12 ? "var(--success)" : "var(--muted)" }}>
-                              {aadhaar.length === 12 ? "✓ 12 digits entered" : `${aadhaar.length}/12 digits`}
-                            </span>
-                        }
+                        {fieldErrors.aadhaar ? (
+                          <span className="field-err">
+                            <AlertCircle size={11} />
+                            {fieldErrors.aadhaar}
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              fontSize: "10.5px",
+                              color:
+                                aadhaar.length === 12
+                                  ? "var(--success)"
+                                  : "var(--muted)",
+                            }}
+                          >
+                            {aadhaar.length === 12
+                              ? "✓ 12 digits entered"
+                              : `${aadhaar.length}/12 digits`}
+                          </span>
+                        )}
                       </div>
                     </div>
-
                   </form>
                 </motion.div>
 
                 {/* ─── RIGHT: SIDEBAR ─── */}
                 <motion.div className="jog-sidebar" variants={fadeUp(0.12)}>
-
                   {/* Summary */}
                   <div className="summary-card">
                     <div className="summary-head">
@@ -1067,7 +1310,14 @@ const DonatePage = () => {
                     <div className="summary-body">
                       <div className="sum-row">
                         <span>Cause</span>
-                        <span className="v" style={{ textAlign:"right", maxWidth:"160px", fontSize:"11.5px" }}>
+                        <span
+                          className="v"
+                          style={{
+                            textAlign: "right",
+                            maxWidth: "160px",
+                            fontSize: "11.5px",
+                          }}
+                        >
                           {activeCause?.title}
                         </span>
                       </div>
@@ -1081,19 +1331,29 @@ const DonatePage = () => {
                       </div>
                       <div className="sum-row">
                         <span>PAN</span>
-                        <span className="v" style={{ fontSize:"11.5px" }}>
-                          {PAN_REGEX.test(pan) ? <span style={{ color:"#86efac" }}>✓ Verified</span> : "—"}
+                        <span className="v" style={{ fontSize: "11.5px" }}>
+                          {PAN_REGEX.test(pan) ? (
+                            <span style={{ color: "#86efac" }}>✓ Verified</span>
+                          ) : (
+                            "—"
+                          )}
                         </span>
                       </div>
                       <div className="sum-row">
                         <span>Aadhaar</span>
-                        <span className="v" style={{ fontSize:"11.5px" }}>
-                          {AADHAAR_REGEX.test(aadhaar) ? <span style={{ color:"#86efac" }}>✓ Entered</span> : "—"}
+                        <span className="v" style={{ fontSize: "11.5px" }}>
+                          {AADHAAR_REGEX.test(aadhaar) ? (
+                            <span style={{ color: "#86efac" }}>✓ Entered</span>
+                          ) : (
+                            "—"
+                          )}
                         </span>
                       </div>
                       <div className="sum-total">
                         <span className="tl">Total</span>
-                        <span className="tv">{amount ? `₹${totalAmt}` : "₹0"}</span>
+                        <span className="tv">
+                          {amount ? `₹${totalAmt}` : "₹0"}
+                        </span>
                       </div>
                       <button
                         className="donate-btn"
@@ -1101,10 +1361,16 @@ const DonatePage = () => {
                         disabled={loading || !amount}
                         onClick={handleSubmit}
                       >
-                        {loading
-                          ? <><div className="spin" /> Processing…</>
-                          : <><Heart size={15} /> Donate Now <ChevronRight size={14} /></>
-                        }
+                        {loading ? (
+                          <>
+                            <div className="spin" /> Processing…
+                          </>
+                        ) : (
+                          <>
+                            <Heart size={15} /> Donate Now{" "}
+                            <ChevronRight size={14} />
+                          </>
+                        )}
                       </button>
                       <p className="secure-note">
                         <ShieldCheck size={11} /> Secured by Razorpay · INR only
@@ -1114,10 +1380,13 @@ const DonatePage = () => {
 
                   {/* Tax benefit */}
                   <div className="tax-card">
-                    <h5><ShieldCheck size={13} color="#bf8f2e" /> Tax Benefit</h5>
+                    <h5>
+                      <ShieldCheck size={13} color="#bf8f2e" /> Tax Benefit
+                    </h5>
                     <p>
-                      All donations are 100% tax-exempt under Section 80G of the Income Tax Act.
-                      Enter your PAN above to receive your deduction certificate by email.
+                      All donations are 100% tax-exempt under Section 80G of the
+                      Income Tax Act. Enter your PAN above to receive your
+                      deduction certificate by email.
                     </p>
                   </div>
 
@@ -1131,17 +1400,21 @@ const DonatePage = () => {
                         </div>
                         <div className="impact-row">
                           <ChevronRight size={13} />
-                          Directed to <strong style={{ marginLeft:3 }}>{activeCause?.title}</strong> fund.
+                          Directed to{" "}
+                          <strong style={{ marginLeft: 3 }}>
+                            {activeCause?.title}
+                          </strong>{" "}
+                          fund.
                         </div>
                       </>
                     ) : (
                       <div className="impact-row">
                         <ChevronRight size={13} />
-                        Select an amount (₹5,000–₹25,000) above to see the impact your gift will make.
+                        Select an amount (₹5,000–₹25,000) above to see the
+                        impact your gift will make.
                       </div>
                     )}
                   </div>
-
                 </motion.div>
               </motion.div>
             </motion.section>
@@ -1151,18 +1424,21 @@ const DonatePage = () => {
         {/* ══ TESTIMONIAL ═══════════════════════════════════ */}
         <section className="jog-testimonial">
           <motion.div
-            initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp()}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp()}
           >
             <span className="quote-mark">"</span>
             <blockquote>
-              I was inspired to give back as a way to demonstrate gratitude to the
-              institution and the professors who shaped my career. Knowing my donation
-              directly supports a student's journey makes every rupee worthwhile.
+              I was inspired to give back as a way to demonstrate gratitude to
+              the institution and the professors who shaped my career. Knowing
+              my donation directly supports a student's journey makes every
+              rupee worthwhile.
             </blockquote>
             <cite>— Distinguished Alumnus, Batch of 1998</cite>
           </motion.div>
         </section>
-
       </div>
     </>
   );

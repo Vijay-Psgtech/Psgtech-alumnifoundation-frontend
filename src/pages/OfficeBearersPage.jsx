@@ -1,7 +1,10 @@
 // frontend/src/pages/OfficeBearersPage.jsx
 import React, { use } from "react";
 import { motion } from "framer-motion";
-import { President, VicePresidents } from "../content/data/OfficeBearersData.js";
+import {
+  President,
+  VicePresidents,
+} from "../content/data/OfficeBearersData.js";
 import usePageTitle from "../hooks/usePageTitle";
 
 const OfficeBearersPage = () => {
@@ -66,7 +69,8 @@ const OfficeBearersPage = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
           >
-            Meet the dedicated leaders steering the PSG Tech Alumni Foundation toward greater excellence and impact.
+            Meet the dedicated leaders steering the PSG Tech Alumni Foundation
+            toward greater excellence and impact.
           </motion.p>
         </motion.div>
 
@@ -171,9 +175,7 @@ const OfficeBearersPage = () => {
                     {vp.role}
                   </p>
 
-                  <p className="text-xs text-slate-500">
-                    {vp.note}
-                  </p>
+                  <p className="text-xs text-slate-500">{vp.note}</p>
 
                   {/* Accent bar */}
                   <div className="mt-4 pt-4 border-t border-slate-100">
@@ -197,7 +199,10 @@ const OfficeBearersPage = () => {
             Driving Excellence & Impact
           </h3>
           <p className="text-lg text-slate-700 leading-relaxed">
-            Our office bearers bring diverse expertise from academia, industry, and philanthropy. Together, they champion the foundation's mission to support PSG Tech's continued growth and create lasting impact for future generations.
+            Our office bearers bring diverse expertise from academia, industry,
+            and philanthropy. Together, they champion the foundation's mission
+            to support PSG Tech's continued growth and create lasting impact for
+            future generations.
           </p>
         </motion.div>
       </div>
