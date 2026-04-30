@@ -163,8 +163,6 @@ const AdminReports = () => {
               </div>
             </div>
 
-            
-
             <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-200">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <h2 className="text-lg font-semibold text-slate-800">
@@ -186,10 +184,19 @@ const AdminReports = () => {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="count"
-                      label={({ department, percent }) => `${department} ${(percent * 100).toFixed(0)}%`}
+                      label={({ department, percent }) =>
+                        `${department} ${(percent * 100).toFixed(0)}%`
+                      }
                     >
                       {departmentData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={['#0088FE', '#00C49F', '#FFBB28', '#FF8042'][index % 4]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={
+                            ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][
+                              index % 4
+                            ]
+                          }
+                        />
                       ))}
                     </Pie>
                     <Tooltip formatter={(value) => formatNumber(value)} />
@@ -199,105 +206,105 @@ const AdminReports = () => {
             </div>
           </section>
           <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-200">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <h2 className="text-lg font-semibold text-slate-800">
-                  Recently Registered Alumni
-                </h2>
-                <p className="mt-2 sm:mt-0 text-sm text-slate-500">
-                  Showing the most recent records
-                </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-lg font-semibold text-slate-800">
+                Recently Registered Alumni
+              </h2>
+              <p className="mt-2 sm:mt-0 text-sm text-slate-500">
+                Showing the most recent records
+              </p>
+            </div>
+
+            <div className="mt-6">
+              <div className="hidden md:block overflow-x-auto">
+                <table className="min-w-full text-sm text-left border border-gray-200">
+                  <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
+                    <tr>
+                      <th className="py-3 px-4 border-b">Name</th>
+                      <th className="py-3 px-4 border-b">Batch</th>
+                      <th className="py-3 px-4 border-b">Branch</th>
+                      <th className="py-3 px-4 border-b">Email</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-700">
+                    {recentAlumni.map((alumni) => (
+                      <tr
+                        key={alumni._id || alumni.email}
+                        className="hover:bg-gray-50"
+                      >
+                        <td className="py-3 px-4 border-b flex items-center gap-3 font-medium">
+                          <img
+                            src={
+                              alumni.profileImage
+                                ? `${API_BASE}/${alumni.profileImage}`
+                                : "/default-avatar.png"
+                            }
+                            alt={`${alumni.firstName || ""} ${alumni.lastName || ""}`}
+                            className="w-8 h-8 rounded-full border object-cover"
+                          />
+                          {alumni.firstName} {alumni.lastName || ""}
+                        </td>
+                        <td className="py-3 px-4 border-b">
+                          {alumni.batchYear || "—"}
+                        </td>
+                        <td className="py-3 px-4 border-b">
+                          {alumni.department || "—"}
+                        </td>
+                        <td className="py-3 px-4 border-b">
+                          {alumni.email || "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              <div className="mt-6">
-                <div className="hidden md:block overflow-x-auto">
-                  <table className="min-w-full text-sm text-left border border-gray-200">
-                    <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
-                      <tr>
-                        <th className="py-3 px-4 border-b">Name</th>
-                        <th className="py-3 px-4 border-b">Batch</th>
-                        <th className="py-3 px-4 border-b">Branch</th>
-                        <th className="py-3 px-4 border-b">Email</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-700">
-                      {recentAlumni.map((alumni) => (
-                        <tr
-                          key={alumni._id || alumni.email}
-                          className="hover:bg-gray-50"
-                        >
-                          <td className="py-3 px-4 border-b flex items-center gap-3 font-medium">
-                            <img
-                              src={
-                                alumni.profileImage
-                                  ? `${API_BASE}/${alumni.profileImage}`
-                                  : "/default-avatar.png"
-                              }
-                              alt={`${alumni.firstName || ""} ${alumni.lastName || ""}`}
-                              className="w-8 h-8 rounded-full border object-cover"
-                            />
-                            {alumni.firstName} {alumni.lastName || ""}
-                          </td>
-                          <td className="py-3 px-4 border-b">
-                            {alumni.batchYear || "—"}
-                          </td>
-                          <td className="py-3 px-4 border-b">
-                            {alumni.department || "—"}
-                          </td>
-                          <td className="py-3 px-4 border-b">
-                            {alumni.email || "—"}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+              <div className="space-y-4 md:hidden">
+                {recentAlumni.map((alumni) => (
+                  <div
+                    key={alumni._id || alumni.email}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      {alumni.files?.currentPhoto ? (
+                        <img
+                          src={`${API_BASE}/uploads/${alumni.files?.currentPhoto}`}
+                          alt={`${alumni.firstName || ""} ${alumni.lastName || ""}`}
+                          className="w-10 h-10 rounded-full border object-cover"
+                        />
+                      ) : (
+                        <img
+                          src="/default-avatar.png"
+                          alt={`${alumni.firstName || ""} ${alumni.lastName || ""}`}
+                          className="w-10 h-10 rounded-full border object-cover"
+                        />
+                      )}
 
-                <div className="space-y-4 md:hidden">
-                  {recentAlumni.map((alumni) => (
-                    <div
-                      key={alumni._id || alumni.email}
-                      className="rounded-xl border border-slate-200 bg-slate-50 p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        {alumni.files?.currentPhoto ? (
-                          <img
-                            src={`${API_BASE}/uploads/${alumni.files?.currentPhoto}`}
-                            alt={`${alumni.firstName || ""} ${alumni.lastName || ""}`}
-                            className="w-10 h-10 rounded-full border object-cover"
-                          />
-                        ) : (
-                          <img
-                            src="/default-avatar.png"
-                            alt={`${alumni.firstName || ""} ${alumni.lastName || ""}`}
-                            className="w-10 h-10 rounded-full border object-cover"
-                          />
-                        )}
-
-                        <div>
-                          <p className="text-sm font-semibold text-slate-800">
-                            {alumni.firstName} {alumni.lastName || ""}
-                          </p>
-                          <p className="text-xs text-slate-500">
-                            {alumni.email || "—"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-slate-600">
-                        <div className="rounded-lg bg-white p-2 shadow-sm">
-                          <p className="font-medium text-slate-700">Batch</p>
-                          <p>{alumni.batchYear || "—"}</p>
-                        </div>
-                        <div className="rounded-lg bg-white p-2 shadow-sm">
-                          <p className="font-medium text-slate-700">Branch</p>
-                          <p>{alumni.department || "—"}</p>
-                        </div>
+                      <div>
+                        <p className="text-sm font-semibold text-slate-800">
+                          {alumni.firstName} {alumni.lastName || ""}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {alumni.email || "—"}
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-slate-600">
+                      <div className="rounded-lg bg-white p-2 shadow-sm">
+                        <p className="font-medium text-slate-700">Batch</p>
+                        <p>{alumni.batchYear || "—"}</p>
+                      </div>
+                      <div className="rounded-lg bg-white p-2 shadow-sm">
+                        <p className="font-medium text-slate-700">Branch</p>
+                        <p>{alumni.department || "—"}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
         </>
       )}
     </div>
