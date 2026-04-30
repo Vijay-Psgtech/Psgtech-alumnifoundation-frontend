@@ -61,22 +61,13 @@ export default function NavBar() {
         ],
       },
       {
-        label: "Find Alumni",
-        submenu: [
-          {
-            label: "Alumni Directory",
-            path: "/alumni/directory",
-            requireAuth: true,
-          },
-          { label: "Alumni Map", path: "/alumni/map", requireAuth: true },
-          {
-            label: "Alumni Chapters",
-            path: "/alumni/chapters",
-            requireAuth: true,
-            icon: "Layers",
-          },
-        ],
-      },
+      label: "Find Alumni",
+      submenu: [
+        user ? { label: "Alumni Directory", path: "/alumni/directory" } : null,
+        user ? { label: "Alumni Map", path: "/alumni/map" } : null,
+        user ? { label: "Alumni Chapters", path: "/alumni/chapters" } : null
+      ].filter(Boolean),
+    },
 
       { label: "Contact", path: "/contact" },
     ];
@@ -510,6 +501,7 @@ export default function NavBar() {
                             setAboutOpen(false);
                             setEventsOpen(false);
                             setAlumniOpen(false);
+                            setAdminOpen(false);
                           }}
                           className={({ isActive }) =>
                             `dropdown-item${isActive ? " active-dd" : ""}`
