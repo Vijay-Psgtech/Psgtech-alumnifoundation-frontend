@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Download } from "lucide-react";
 import AboutImg from "../assets/Images/3c2b2ea4eae14b04a4c38c9e00ae71b9.png";
+import usePageTitle from "../hooks/usePageTitle";
+
 
 const timelineData = [
   { title: "Heritage of Excellence", sub: "Since foundation", side: "left" },
@@ -36,6 +38,8 @@ function TCard({ name, role }) {
 
 export default function AboutPage() {
   const fade = (d = 0, x = 0) => ({ hidden: { opacity: 0, y: x ? 0 : 28, x }, visible: { opacity: 1, y: 0, x: 0, transition: { duration: .85, delay: d, ease: [0.22, 1, 0.36, 1] } } });
+  usePageTitle("About Us");
+
   return (
     <>
       <style>{`
