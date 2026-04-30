@@ -32,15 +32,23 @@ const SendNotification = ({ onClose, onSuccess }) => {
   const fileRef = useRef();
 
   useEffect(() => {
-    alumniAPI.getBatches().then((res) => {
-      setBatches(res.data.batches || []);
-    }).catch(() => {});
+    alumniAPI
+      .getBatches()
+      .then((res) => {
+        setBatches(res.data.batches || []);
+      })
+      .catch(() => {});
   }, []);
 
   const handleFile = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const allowed = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "application/pdf",
+    ];
     if (!allowed.includes(file.type)) {
       setError("Only JPG, PNG, WEBP images or PDF files are allowed.");
       return;
@@ -535,7 +543,9 @@ const SendNotification = ({ onClose, onSuccess }) => {
               </div>
               <div>
                 <div className="sn-header-title">Send Notification</div>
-                <div className="sn-header-sub">Will be reviewed by admin before publishing</div>
+                <div className="sn-header-sub">
+                  Will be reviewed by admin before publishing
+                </div>
               </div>
             </div>
             <button className="sn-close" onClick={onClose}>
@@ -552,14 +562,18 @@ const SendNotification = ({ onClose, onSuccess }) => {
                 </div>
                 <div className="sn-success-title">Notification Submitted!</div>
                 <div className="sn-success-text">
-                  Your notification is pending admin approval. Once approved it will be visible to the selected audience.
+                  Your notification is pending admin approval. Once approved it
+                  will be visible to the selected audience.
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
                 {error && (
                   <div className="sn-error">
-                    <AlertCircle size={16} style={{ flexShrink: 0, marginTop: 1 }} />
+                    <AlertCircle
+                      size={16}
+                      style={{ flexShrink: 0, marginTop: 1 }}
+                    />
                     <span>{error}</span>
                   </div>
                 )}
@@ -571,7 +585,9 @@ const SendNotification = ({ onClose, onSuccess }) => {
                     className="sn-input"
                     placeholder="e.g. Annual Alumni Meet 2025"
                     value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, title: e.target.value })
+                    }
                     maxLength={120}
                     required
                   />
@@ -584,7 +600,9 @@ const SendNotification = ({ onClose, onSuccess }) => {
                     className="sn-textarea"
                     placeholder="Write your message here..."
                     value={form.message}
-                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, message: e.target.value })
+                    }
                     required
                   />
                 </div>
@@ -597,7 +615,13 @@ const SendNotification = ({ onClose, onSuccess }) => {
                   <div className="sn-audience-tabs">
                     <div
                       className={`sn-tab ${form.audienceType === "all" ? "active" : ""}`}
-                      onClick={() => setForm({ ...form, audienceType: "all", targetBatch: "" })}
+                      onClick={() =>
+                        setForm({
+                          ...form,
+                          audienceType: "all",
+                          targetBatch: "",
+                        })
+                      }
                     >
                       <div className="sn-tab-radio" />
                       <Users size={16} />
@@ -605,7 +629,9 @@ const SendNotification = ({ onClose, onSuccess }) => {
                     </div>
                     <div
                       className={`sn-tab ${form.audienceType === "batch" ? "active" : ""}`}
-                      onClick={() => setForm({ ...form, audienceType: "batch" })}
+                      onClick={() =>
+                        setForm({ ...form, audienceType: "batch" })
+                      }
                     >
                       <div className="sn-tab-radio" />
                       <BookOpen size={16} />
@@ -617,12 +643,16 @@ const SendNotification = ({ onClose, onSuccess }) => {
                     <select
                       className="sn-select"
                       value={form.targetBatch}
-                      onChange={(e) => setForm({ ...form, targetBatch: e.target.value })}
+                      onChange={(e) =>
+                        setForm({ ...form, targetBatch: e.target.value })
+                      }
                       required
                     >
                       <option value="">— Select a batch —</option>
                       {batches.map((b) => (
-                        <option key={b} value={b}>{b}</option>
+                        <option key={b} value={b}>
+                          {b}
+                        </option>
                       ))}
                     </select>
                   )}
@@ -645,8 +675,12 @@ const SendNotification = ({ onClose, onSuccess }) => {
                       <div className="sn-attach-icon">
                         <Paperclip size={20} />
                       </div>
-                      <div className="sn-attach-text">Click to attach a file</div>
-                      <div className="sn-attach-hint">JPG, PNG, WEBP or PDF · Max 5 MB</div>
+                      <div className="sn-attach-text">
+                        Click to attach a file
+                      </div>
+                      <div className="sn-attach-hint">
+                        JPG, PNG, WEBP or PDF · Max 5 MB
+                      </div>
                     </label>
                   ) : (
                     <div className="sn-attachment-preview">
@@ -654,7 +688,9 @@ const SendNotification = ({ onClose, onSuccess }) => {
                         {isImage ? <Image size={18} /> : <FileText size={18} />}
                       </div>
                       <div style={{ flex: 1, overflow: "hidden" }}>
-                        <div className="sn-attachment-name">{attachment.name}</div>
+                        <div className="sn-attachment-name">
+                          {attachment.name}
+                        </div>
                         <div className="sn-attachment-size">
                           {(attachment.size / 1024).toFixed(1)} KB
                         </div>
@@ -672,10 +708,18 @@ const SendNotification = ({ onClose, onSuccess }) => {
 
                 {/* Footer */}
                 <div className="sn-footer">
-                  <button type="button" className="sn-btn-cancel" onClick={onClose}>
+                  <button
+                    type="button"
+                    className="sn-btn-cancel"
+                    onClick={onClose}
+                  >
                     Cancel
                   </button>
-                  <button type="submit" className="sn-btn-submit" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="sn-btn-submit"
+                    disabled={loading}
+                  >
                     <Send size={16} />
                     {loading ? "Submitting…" : "Submit for Approval"}
                   </button>

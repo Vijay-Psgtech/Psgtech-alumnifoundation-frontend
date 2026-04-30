@@ -42,42 +42,50 @@ const ContactUsPage = () => {
     }));
   }, []);
 
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setError("");
+      setLoading(true);
 
-    // ✅ Validate form
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-      setError("Please fill in all fields");
-      setLoading(false);
-      return;
-    }
+      // ✅ Validate form
+      if (
+        !formData.name ||
+        !formData.email ||
+        !formData.subject ||
+        !formData.message
+      ) {
+        setError("Please fill in all fields");
+        setLoading(false);
+        return;
+      }
 
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError("Please enter a valid email address");
-      setLoading(false);
-      return;
-    }
+      if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        setError("Please enter a valid email address");
+        setLoading(false);
+        return;
+      }
 
-    try {
-      // TODO: Connect to backend email service
-      // For now, just simulate submission
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      try {
+        // TODO: Connect to backend email service
+        // For now, just simulate submission
+        await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      setSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+        setSubmitted(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
 
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 5000);
-    } catch (err) {
-      setError("Failed to send message. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }, [formData]);
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 5000);
+      } catch (err) {
+        setError("Failed to send message. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData],
+  );
 
   const contactInfo = [
     {
@@ -134,7 +142,8 @@ const ContactUsPage = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
           >
-            Have questions about the foundation? We'd love to hear from you. Reach out and let's connect.
+            Have questions about the foundation? We'd love to hear from you.
+            Reach out and let's connect.
           </motion.p>
         </motion.div>
 
@@ -310,7 +319,10 @@ const ContactUsPage = () => {
                 Get in Touch
               </h2>
               <p className="text-slate-600 text-lg leading-relaxed mb-4">
-                Have any questions about the PSG Tech Alumni Foundation? Our team is ready to help. Whether you're interested in donating, connecting with fellow alumni, or learning more about our initiatives, we'd love to hear from you.
+                Have any questions about the PSG Tech Alumni Foundation? Our
+                team is ready to help. Whether you're interested in donating,
+                connecting with fellow alumni, or learning more about our
+                initiatives, we'd love to hear from you.
               </p>
               <p className="text-slate-600 text-lg leading-relaxed">
                 Fill out the form and we'll get back to you as soon as possible.
@@ -341,9 +353,7 @@ const ContactUsPage = () => {
               <p className="text-slate-700 mb-2">
                 For urgent matters, please call our main office directly:
               </p>
-              <p className="text-2xl font-bold text-purple-600">
-                0422 2572177
-              </p>
+              <p className="text-2xl font-bold text-purple-600">0422 2572177</p>
             </div>
           </motion.div>
         </motion.div>

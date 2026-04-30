@@ -4,40 +4,106 @@ import { ArrowRight, Calendar, Download } from "lucide-react";
 import AboutImg from "../assets/Images/3c2b2ea4eae14b04a4c38c9e00ae71b9.png";
 import usePageTitle from "../hooks/usePageTitle";
 
-
 const timelineData = [
   { title: "Heritage of Excellence", sub: "Since foundation", side: "left" },
   { title: "Global Chapters", sub: "Global network expansion", side: "right" },
   { title: "Foundation Registered", sub: "19th October 2016", side: "left" },
   { title: "First Scholarships", sub: "Recipients awarded", side: "right" },
-  { title: "GRD Museum Initiative", sub: "Major projects launched", side: "left" },
+  {
+    title: "GRD Museum Initiative",
+    sub: "Major projects launched",
+    side: "left",
+  },
 ];
 const trustees = [
   { name: "Dr. S. Senior", role: "Managing Trustee" },
   { name: "Prof. A. Principal", role: "Principal (Ex-officio)" },
-  { name: "Mr. P. President", role: "President, Alumni Association (Ex-officio)" },
+  {
+    name: "Mr. P. President",
+    role: "President, Alumni Association (Ex-officio)",
+  },
 ];
 const initiatives = [
-  "Alumni Day & Young Alumni Meet", "Entrepreneurship & Innovation Programs",
-  "Technical Conferences & Workshops", "Alumni Innovation Exhibitions",
-  "Underprivileged Student Scholarships", "GRD Inter-Collegiate Tamil Debate", "Academic Excellence Awards",
+  "Alumni Day & Young Alumni Meet",
+  "Entrepreneurship & Innovation Programs",
+  "Technical Conferences & Workshops",
+  "Alumni Innovation Exhibitions",
+  "Underprivileged Student Scholarships",
+  "GRD Inter-Collegiate Tamil Debate",
+  "Academic Excellence Awards",
 ];
 
 function TCard({ name, role }) {
-  const ini = name.split(" ").map(n => n[0]).slice(0, 2).join("");
+  const ini = name
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("");
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "13px 0", borderBottom: "1px solid rgba(201,168,76,.1)" }}>
-      <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#b8882a,#e0bc55)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Playfair Display',serif", fontWeight: 700, fontSize: 14, color: "#08090f", flexShrink: 0 }}>{ini}</div>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        padding: "13px 0",
+        borderBottom: "1px solid rgba(201,168,76,.1)",
+      }}
+    >
+      <div
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          background: "linear-gradient(135deg,#b8882a,#e0bc55)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "'Playfair Display',serif",
+          fontWeight: 700,
+          fontSize: 14,
+          color: "#08090f",
+          flexShrink: 0,
+        }}
+      >
+        {ini}
+      </div>
       <div>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 600, fontSize: 13, color: "#f2ede3" }}>{name}</div>
-        <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 300, fontSize: 11, color: "rgba(200,215,240,.42)", marginTop: 2 }}>{role}</div>
+        <div
+          style={{
+            fontFamily: "'Outfit',sans-serif",
+            fontWeight: 600,
+            fontSize: 13,
+            color: "#f2ede3",
+          }}
+        >
+          {name}
+        </div>
+        <div
+          style={{
+            fontFamily: "'Outfit',sans-serif",
+            fontWeight: 300,
+            fontSize: 11,
+            color: "rgba(200,215,240,.42)",
+            marginTop: 2,
+          }}
+        >
+          {role}
+        </div>
       </div>
     </div>
   );
 }
 
 export default function AboutPage() {
-  const fade = (d = 0, x = 0) => ({ hidden: { opacity: 0, y: x ? 0 : 28, x }, visible: { opacity: 1, y: 0, x: 0, transition: { duration: .85, delay: d, ease: [0.22, 1, 0.36, 1] } } });
+  const fade = (d = 0, x = 0) => ({
+    hidden: { opacity: 0, y: x ? 0 : 28, x },
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      transition: { duration: 0.85, delay: d, ease: [0.22, 1, 0.36, 1] },
+    },
+  });
   usePageTitle("About Us");
 
   return (
@@ -114,44 +180,117 @@ export default function AboutPage() {
       <main className="ap">
         <div className="ap-inner">
           <div className="ap-hero">
-            <motion.div variants={fade(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <motion.div
+              variants={fade(0)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               <div className="ap-ey">PSG Tech Alumni Foundation</div>
-              <h1 className="ap-h1">Connecting <em>Techians</em><br />Across the Globe</h1>
-              <p className="ap-lead">Celebrating a legacy of excellence — connecting alumni globally with mentorship, opportunities, and purpose-driven initiatives since 2016.</p>
+              <h1 className="ap-h1">
+                Connecting <em>Techians</em>
+                <br />
+                Across the Globe
+              </h1>
+              <p className="ap-lead">
+                Celebrating a legacy of excellence — connecting alumni globally
+                with mentorship, opportunities, and purpose-driven initiatives
+                since 2016.
+              </p>
               <div className="ap-btns">
-                <a href="/donate" className="btn-g">Donate <ArrowRight size={15} /></a>
-                <a href="/psg-tech-foundation-brochure.pdf" className="btn-gh"><Download size={13} /> Brochure</a>
+                <a href="/donate" className="btn-g">
+                  Donate <ArrowRight size={15} />
+                </a>
+                <a href="/psg-tech-foundation-brochure.pdf" className="btn-gh">
+                  <Download size={13} /> Brochure
+                </a>
               </div>
             </motion.div>
-            <motion.div className="hero-iw" variants={fade(.12)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <div className="hero-if"><img src={AboutImg} alt="PSG Tech Alumni Foundation" /></div>
-              <div className="hc hc-tl" /><div className="hc hc-br" />
+            <motion.div
+              className="hero-iw"
+              variants={fade(0.12)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="hero-if">
+                <img src={AboutImg} alt="PSG Tech Alumni Foundation" />
+              </div>
+              <div className="hc hc-tl" />
+              <div className="hc hc-br" />
             </motion.div>
           </div>
 
           <div className="cg">
             <article>
               <div className="sl">Our Story</div>
-              <h2 className="ap-h2">Built on <em>Legacy</em>, Driven by Purpose</h2>
-              <p className="ap-p">The PSG TECH Alumni Foundation, a long felt need for a financial arm of PSG Tech Alumni Association, was registered on <strong>19th October 2016</strong> as a not-for-profit Trust under the laws of the State of Tamil Nadu.</p>
-              <p className="ap-p">The Foundation was established to provide an avenue through which alumni and well-wishers may contribute financially through gifts, grants, and bequests to benefit present and future students — providing scholarship assistance and funding special projects like PSG-GRD Science & Technology Museum and Research Centre.</p>
-              <p className="ap-p">The Foundation's purpose is to receive gifts for the College / Alumni Association and to hold these contributed funds in perpetual endowment. Only the accrued interest and/or income from the funds is expended unless otherwise designated.</p>
-              <p className="ap-p">The Foundation is managed by a Board of Trustees comprising six senior alumni and three ex-officio Trustees. The Board provides direction for major functions necessary to carry out the mission of the Foundation.</p>
+              <h2 className="ap-h2">
+                Built on <em>Legacy</em>, Driven by Purpose
+              </h2>
+              <p className="ap-p">
+                The PSG TECH Alumni Foundation, a long felt need for a financial
+                arm of PSG Tech Alumni Association, was registered on{" "}
+                <strong>19th October 2016</strong> as a not-for-profit Trust
+                under the laws of the State of Tamil Nadu.
+              </p>
+              <p className="ap-p">
+                The Foundation was established to provide an avenue through
+                which alumni and well-wishers may contribute financially through
+                gifts, grants, and bequests to benefit present and future
+                students — providing scholarship assistance and funding special
+                projects like PSG-GRD Science & Technology Museum and Research
+                Centre.
+              </p>
+              <p className="ap-p">
+                The Foundation's purpose is to receive gifts for the College /
+                Alumni Association and to hold these contributed funds in
+                perpetual endowment. Only the accrued interest and/or income
+                from the funds is expended unless otherwise designated.
+              </p>
+              <p className="ap-p">
+                The Foundation is managed by a Board of Trustees comprising six
+                senior alumni and three ex-officio Trustees. The Board provides
+                direction for major functions necessary to carry out the mission
+                of the Foundation.
+              </p>
               <ol className="ap-ol">
-                <li>Award of Scholarships to the needy and deserving students.</li>
-                <li>Setting up and Managing the PSG-GRD Museum at Neelambur campus.</li>
-                <li>Any other activity to support PSG Tech to achieve excellence in education and research including fellowships, centers of excellence, new programs, and special projects.</li>
+                <li>
+                  Award of Scholarships to the needy and deserving students.
+                </li>
+                <li>
+                  Setting up and Managing the PSG-GRD Museum at Neelambur
+                  campus.
+                </li>
+                <li>
+                  Any other activity to support PSG Tech to achieve excellence
+                  in education and research including fellowships, centers of
+                  excellence, new programs, and special projects.
+                </li>
               </ol>
-              <p className="ap-p" style={{ marginTop: 18 }}>The foundation abides by rules and regulations followed in the <strong>Indian Trusts Act, 1882</strong>.</p>
+              <p className="ap-p" style={{ marginTop: 18 }}>
+                The foundation abides by rules and regulations followed in the{" "}
+                <strong>Indian Trusts Act, 1882</strong>.
+              </p>
 
-              <div className="sl" style={{ marginTop: 48 }}>Our Journey</div>
+              <div className="sl" style={{ marginTop: 48 }}>
+                Our Journey
+              </div>
               <div className="tl-wrap">
                 <div className="tl-line" />
                 <div className="tl-items">
                   {timelineData.map((t, i) => (
-                    <motion.div key={t.title} className={`tl-r ${t.side === "left" ? "l" : "r"}`}
-                      initial={{ opacity: 0, x: t.side === "left" ? -28 : 28 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: .7, delay: i * .08 }} viewport={{ once: true }}>
-                      <div className="tl-c"><div className="tl-s">{t.sub}</div><div className="tl-t">{t.title}</div></div>
+                    <motion.div
+                      key={t.title}
+                      className={`tl-r ${t.side === "left" ? "l" : "r"}`}
+                      initial={{ opacity: 0, x: t.side === "left" ? -28 : 28 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.7, delay: i * 0.08 }}
+                      viewport={{ once: true }}
+                    >
+                      <div className="tl-c">
+                        <div className="tl-s">{t.sub}</div>
+                        <div className="tl-t">{t.title}</div>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -159,27 +298,110 @@ export default function AboutPage() {
             </article>
 
             <aside>
-              <motion.div className="sc" variants={fade(.18)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+              <motion.div
+                className="sc"
+                variants={fade(0.18)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 <div className="sc-ti">Board of Trustees</div>
-                <div className="sc-su">Current managing trustees and ex-officio members</div>
-                {trustees.map(t => <TCard key={t.name} {...t} />)}
-                <div style={{ display: "flex", gap: 10, marginTop: 20, flexWrap: "wrap" }}>
-                  <a href="/donate" className="btn-g" style={{ flex: 1, justifyContent: "center", fontSize: 11 }}>Support</a>
-                  <a href="/contact" className="btn-gh" style={{ flex: 1, justifyContent: "center", fontSize: 11 }}>Contact</a>
+                <div className="sc-su">
+                  Current managing trustees and ex-officio members
+                </div>
+                {trustees.map((t) => (
+                  <TCard key={t.name} {...t} />
+                ))}
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    marginTop: 20,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <a
+                    href="/donate"
+                    className="btn-g"
+                    style={{ flex: 1, justifyContent: "center", fontSize: 11 }}
+                  >
+                    Support
+                  </a>
+                  <a
+                    href="/contact"
+                    className="btn-gh"
+                    style={{ flex: 1, justifyContent: "center", fontSize: 11 }}
+                  >
+                    Contact
+                  </a>
                 </div>
               </motion.div>
-              <motion.div className="sc" variants={fade(.28)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <div className="sc-ti" style={{ marginBottom: 16 }}>Impact Numbers</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                  {[{ v: "200+", l: "Scholarships" }, { v: "35+", l: "Projects" }].map(s => (
-                    <div key={s.l} style={{ background: "rgba(201,168,76,.06)", border: "1px solid rgba(201,168,76,.13)", borderRadius: 8, padding: 14, textAlign: "center" }}>
-                      <div className="sc-sv">{s.v}</div><div className="sc-sl">{s.l}</div>
+              <motion.div
+                className="sc"
+                variants={fade(0.28)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <div className="sc-ti" style={{ marginBottom: 16 }}>
+                  Impact Numbers
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 12,
+                  }}
+                >
+                  {[
+                    { v: "200+", l: "Scholarships" },
+                    { v: "35+", l: "Projects" },
+                  ].map((s) => (
+                    <div
+                      key={s.l}
+                      style={{
+                        background: "rgba(201,168,76,.06)",
+                        border: "1px solid rgba(201,168,76,.13)",
+                        borderRadius: 8,
+                        padding: 14,
+                        textAlign: "center",
+                      }}
+                    >
+                      <div className="sc-sv">{s.v}</div>
+                      <div className="sc-sl">{s.l}</div>
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 14, padding: "12px 14px", background: "rgba(201,168,76,.04)", border: "1px solid rgba(201,168,76,.1)", borderRadius: 8 }}>
-                  <div style={{ fontSize: 10, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(200,215,240,.3)", marginBottom: 4 }}>Endowment</div>
-                  <div style={{ fontFamily: "'Outfit',sans-serif", fontWeight: 600, fontSize: 14, color: "rgba(200,215,240,.55)" }}>Confidential</div>
+                <div
+                  style={{
+                    marginTop: 14,
+                    padding: "12px 14px",
+                    background: "rgba(201,168,76,.04)",
+                    border: "1px solid rgba(201,168,76,.1)",
+                    borderRadius: 8,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 10,
+                      letterSpacing: ".16em",
+                      textTransform: "uppercase",
+                      color: "rgba(200,215,240,.3)",
+                      marginBottom: 4,
+                    }}
+                  >
+                    Endowment
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "'Outfit',sans-serif",
+                      fontWeight: 600,
+                      fontSize: 14,
+                      color: "rgba(200,215,240,.55)",
+                    }}
+                  >
+                    Confidential
+                  </div>
                 </div>
               </motion.div>
             </aside>
@@ -188,18 +410,43 @@ export default function AboutPage() {
           <div className="sl">Key Initiatives</div>
           <div className="ig">
             {initiatives.map((it, i) => (
-              <motion.div key={it} className="ic" initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: .65, delay: i * .055 }} viewport={{ once: true }}>
-                <div className="ii"><Calendar size={15} style={{ color: "#c9a84c" }} /></div>
+              <motion.div
+                key={it}
+                className="ic"
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, delay: i * 0.055 }}
+                viewport={{ once: true }}
+              >
+                <div className="ii">
+                  <Calendar size={15} style={{ color: "#c9a84c" }} />
+                </div>
                 <div className="it">{it}</div>
               </motion.div>
             ))}
           </div>
 
-          <motion.div className="cb" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: .75 }} viewport={{ once: true }}>
-            <div><div className="cb-h">Support the Foundation</div><div className="cb-p">Your gift helps transform student lives — scholarships, labs, and more.</div></div>
+          <motion.div
+            className="cb"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75 }}
+            viewport={{ once: true }}
+          >
+            <div>
+              <div className="cb-h">Support the Foundation</div>
+              <div className="cb-p">
+                Your gift helps transform student lives — scholarships, labs,
+                and more.
+              </div>
+            </div>
             <div className="ap-btns">
-              <a href="/donate" className="btn-g">Donate Now <ArrowRight size={15} /></a>
-              <a href="/contact" className="btn-gh">Contact Us</a>
+              <a href="/donate" className="btn-g">
+                Donate Now <ArrowRight size={15} />
+              </a>
+              <a href="/contact" className="btn-gh">
+                Contact Us
+              </a>
             </div>
           </motion.div>
         </div>

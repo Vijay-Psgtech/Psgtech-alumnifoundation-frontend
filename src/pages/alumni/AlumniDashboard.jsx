@@ -126,7 +126,6 @@ const AlumniDashboard = () => {
     `${user?.firstName?.charAt(0) ?? ""}${user?.lastName?.charAt(0) ?? ""}`.toUpperCase();
   const avatarGrad = pickColor(user?.firstName ?? "");
 
-
   /* --- Stats ---- */
   const STATS = [
     {
@@ -159,7 +158,6 @@ const AlumniDashboard = () => {
     },
   ];
 
-  
   useEffect(() => {
     alumniAPI
       .getStats()

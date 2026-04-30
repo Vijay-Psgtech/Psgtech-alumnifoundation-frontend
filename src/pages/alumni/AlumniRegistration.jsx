@@ -1902,8 +1902,8 @@ const AlumniRegistration = () => {
           </motion.div>
 
           <p className="text-center text-[11px] text-slate-400 mt-6 pb-2">
-            © {new Date().getFullYear()} PSG College of Technology
-            Alumni Platform · Version 1.0.0
+            © {new Date().getFullYear()} PSG College of Technology Alumni
+            Platform · Version 1.0.0
           </p>
         </div>
       </div>

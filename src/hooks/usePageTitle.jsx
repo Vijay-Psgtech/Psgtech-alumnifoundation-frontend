@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 
 const usePageTitle = (title) => {
   useEffect(() => {
@@ -6,4 +6,4 @@ const usePageTitle = (title) => {
   }, [title]);
 };
 
-export default usePageTitle
+export default usePageTitle;

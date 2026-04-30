@@ -459,11 +459,11 @@ const AdminDashboard = () => {
                       page,
                       limit: 20,
                     };
-                    
+
                     if (user.role === "admin") {
                       queryParams.department = user.department;
                     }
-                    
+
                     const res = await adminAPI.getAllAlumni(queryParams);
                     setAlumniList(res.data.alumni || []);
                     setAlumniPageData({
@@ -485,11 +485,11 @@ const AdminDashboard = () => {
                       page: 1,
                       limit: 20,
                     };
-                    
+
                     if (user.role === "admin") {
                       queryParams.department = user.department;
                     }
-                    
+
                     const res = await adminAPI.getAllAlumni(queryParams);
                     setAlumniList(res.data.alumni || []);
                     setAlumniPageData({
@@ -503,7 +503,6 @@ const AdminDashboard = () => {
                   }
                 }}
                 userRole={user.role}
-                
               />
             </motion.div>
           )}

@@ -47,14 +47,34 @@ const CHAPTER_CATEGORIES = [
 ];
 
 const CATEGORY_COLORS = {
-  regional: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  professional: { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" },
-  interest: { bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200" },
-  industry: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
+  regional: {
+    bg: "bg-blue-50",
+    text: "text-blue-700",
+    border: "border-blue-200",
+  },
+  professional: {
+    bg: "bg-emerald-50",
+    text: "text-emerald-700",
+    border: "border-emerald-200",
+  },
+  interest: {
+    bg: "bg-violet-50",
+    text: "text-violet-700",
+    border: "border-violet-200",
+  },
+  industry: {
+    bg: "bg-amber-50",
+    text: "text-amber-700",
+    border: "border-amber-200",
+  },
 };
 
 const getInitials = (name = "") =>
-  name.split(" ").map(n => n[0]).join("").toUpperCase() || "?";
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase() || "?";
 
 const avatarGradients = [
   "from-rose-400 to-orange-400",
@@ -77,7 +97,7 @@ const CategoryBadge = ({ category }) => {
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${colors.bg} ${colors.text} border ${colors.border}`}
     >
-      {CHAPTER_CATEGORIES.find(c => c.id === category)?.label || category}
+      {CHAPTER_CATEGORIES.find((c) => c.id === category)?.label || category}
     </span>
   );
 };
@@ -151,7 +171,9 @@ const ChapterCard = ({
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 text-slate-600">
               <Users size={14} className="flex-shrink-0" />
-              <span className="text-xs font-semibold">{chapter.memberCount || 0}</span>
+              <span className="text-xs font-semibold">
+                {chapter.memberCount || 0}
+              </span>
             </div>
             <div className="flex items-center gap-1 text-slate-500">
               <Clock size={14} className="flex-shrink-0" />
@@ -166,7 +188,10 @@ const ChapterCard = ({
 
           {/* Actions */}
           {isAuthor && (
-            <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="flex items-center gap-1"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -225,7 +250,15 @@ const ChapterCard = ({
 };
 
 // Chapter Detail Modal
-const ChapterDetailModal = ({ chapter, user, isAuthor, isMember, onClose, onEdit, onJoin }) => {
+const ChapterDetailModal = ({
+  chapter,
+  user,
+  isAuthor,
+  isMember,
+  onClose,
+  onEdit,
+  onJoin,
+}) => {
   const bannerUrl = chapter.bannerImage
     ? `${API_BASE}/uploads/${chapter.bannerImage}`
     : "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop";
@@ -348,7 +381,7 @@ const ChapterDetailModal = ({ chapter, user, isAuthor, isMember, onClose, onEdit
             <div className="flex items-center gap-3">
               <div
                 className={`w-10 h-10 rounded-lg bg-gradient-to-br ${pickGradient(
-                  chapter.founderName
+                  chapter.founderName,
                 )} flex items-center justify-center text-white font-bold`}
               >
                 {getInitials(chapter.founderName)}
@@ -386,13 +419,7 @@ const ChapterDetailModal = ({ chapter, user, isAuthor, isMember, onClose, onEdit
 };
 
 // Create/Edit Chapter Form Modal
-const ChapterFormModal = ({
-  chapter,
-  onSave,
-  onCancel,
-  loading,
-  error,
-}) => {
+const ChapterFormModal = ({ chapter, onSave, onCancel, loading, error }) => {
   const [formData, setFormData] = useState({
     title: chapter?.title || "",
     location: chapter?.location || "",
@@ -404,9 +431,7 @@ const ChapterFormModal = ({
   });
 
   const [bannerPreview, setBannerPreview] = useState(
-    chapter?.bannerImage
-      ? `${API_BASE}/uploads/${chapter.bannerImage}`
-      : null
+    chapter?.bannerImage ? `${API_BASE}/uploads/${chapter.bannerImage}` : null,
   );
 
   const handleBannerChange = useCallback((e) => {
@@ -458,10 +483,16 @@ const ChapterFormModal = ({
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSubmit} className="overflow-y-auto flex-1 p-6 space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          className="overflow-y-auto flex-1 p-6 space-y-5"
+        >
           {error && (
             <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <AlertCircle size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle
+                size={18}
+                className="text-red-600 flex-shrink-0 mt-0.5"
+              />
               <div>
                 <p className="font-semibold text-red-800">Error</p>
                 <p className="text-sm text-red-700 mt-0.5">{error}</p>
@@ -697,7 +728,8 @@ const AlumniChapters = () => {
         chapter.title.toLowerCase().includes(search.toLowerCase()) ||
         chapter.location?.toLowerCase().includes(search.toLowerCase()) ||
         chapter.description.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory = !filterCategory || chapter.category === filterCategory;
+      const matchesCategory =
+        !filterCategory || chapter.category === filterCategory;
       return matchesSearch && matchesCategory;
     });
   }, [chapters, search, filterCategory]);
@@ -730,7 +762,9 @@ const AlumniChapters = () => {
 
         if (response?.data) {
           setSuccess(
-            editingChapter ? "Chapter updated successfully!" : "Chapter created successfully!"
+            editingChapter
+              ? "Chapter updated successfully!"
+              : "Chapter created successfully!",
           );
           setShowCreateForm(false);
           setEditingChapter(null);
@@ -745,22 +779,26 @@ const AlumniChapters = () => {
         setFormLoading(false);
       }
     },
-    [editingChapter, fetchChapters]
+    [editingChapter, fetchChapters],
   );
 
   // Delete Chapter
-  const handleDeleteChapter = useCallback(async (chapterId) => {
-    if (!window.confirm("Are you sure you want to delete this chapter?")) return;
+  const handleDeleteChapter = useCallback(
+    async (chapterId) => {
+      if (!window.confirm("Are you sure you want to delete this chapter?"))
+        return;
 
-    try {
-      await alumniAPI.deleteChapter?.(chapterId);
-      setSuccess("Chapter deleted successfully!");
-      fetchChapters();
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to delete chapter");
-    }
-  }, [fetchChapters]);
+      try {
+        await alumniAPI.deleteChapter?.(chapterId);
+        setSuccess("Chapter deleted successfully!");
+        fetchChapters();
+        setTimeout(() => setSuccess(""), 3000);
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to delete chapter");
+      }
+    },
+    [fetchChapters],
+  );
 
   // Join/Leave Chapter
   const handleToggleJoin = useCallback(
@@ -776,7 +814,7 @@ const AlumniChapters = () => {
         setError(err.response?.data?.message || "Failed to update membership");
       }
     },
-    [userChapterIds, fetchChapters]
+    [userChapterIds, fetchChapters],
   );
 
   // Handlers
@@ -815,7 +853,9 @@ const AlumniChapters = () => {
                 <span className="text-sm font-semibold">Back</span>
               </motion.button>
               <div className="h-6 w-px bg-slate-200" />
-              <h1 className="text-2xl font-bold text-slate-800">Alumni Chapters</h1>
+              <h1 className="text-2xl font-bold text-slate-800">
+                Alumni Chapters
+              </h1>
             </div>
 
             <div className="flex items-center gap-3">
@@ -854,7 +894,10 @@ const AlumniChapters = () => {
                 exit={{ opacity: 0, y: -10 }}
                 className="mb-6 flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg"
               >
-                <CheckCircle size={20} className="text-emerald-600 flex-shrink-0" />
+                <CheckCircle
+                  size={20}
+                  className="text-emerald-600 flex-shrink-0"
+                />
                 <p className="font-semibold text-emerald-800">{success}</p>
               </motion.div>
             )}
@@ -894,7 +937,9 @@ const AlumniChapters = () => {
 
             {/* Category Filter */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm font-semibold text-slate-600">Filter:</span>
+              <span className="text-sm font-semibold text-slate-600">
+                Filter:
+              </span>
               <button
                 onClick={() => setFilterCategory("")}
                 className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
@@ -937,7 +982,9 @@ const AlumniChapters = () => {
             <div className="text-center py-20">
               <Users size={48} className="text-slate-300 mx-auto mb-4" />
               <p className="text-slate-600 font-semibold text-lg">
-                {search || filterCategory ? "No chapters match your search." : "No chapters yet."}
+                {search || filterCategory
+                  ? "No chapters match your search."
+                  : "No chapters yet."}
               </p>
               {!search && !filterCategory && (
                 <p className="text-slate-500 mt-2 mb-6">

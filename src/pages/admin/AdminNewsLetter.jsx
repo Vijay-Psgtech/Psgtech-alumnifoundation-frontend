@@ -8,7 +8,7 @@ import {
   Pencil,
   FileText,
   Download,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import { newsLetterAPI, API_BASE } from "../../services/api";
 import {
@@ -53,7 +53,11 @@ const formatDate = (value) => {
 
 const getPreviewUrl = (path) => {
   if (!path) return null;
-  if (path.startsWith("http") || path.startsWith("/") || path.startsWith("data:")) {
+  if (
+    path.startsWith("http") ||
+    path.startsWith("/") ||
+    path.startsWith("data:")
+  ) {
     return path;
   }
   return `${API_BASE}/${path}`;
@@ -85,8 +89,7 @@ const NewsLetterFormModal = ({ initial, onSave, onClose, isLoading }) => {
 
   const isEdit = !!initial?._id;
 
-  const set = (key, value) =>
-    setForm((prev) => ({ ...prev, [key]: value }));
+  const set = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
 
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
@@ -270,7 +273,11 @@ const NewsLetterFormModal = ({ initial, onSave, onClose, isLoading }) => {
             } ${isLoading ? "opacity-70" : ""}`}
           >
             <CheckCircle size={16} />
-            {isLoading ? "Saving..." : isEdit ? "Save Changes" : "Create Newsletter"}
+            {isLoading
+              ? "Saving..."
+              : isEdit
+                ? "Save Changes"
+                : "Create Newsletter"}
           </button>
           <button
             type="button"
@@ -346,10 +353,16 @@ const AdminNewsLetter = () => {
 
       if (modal?.data?._id) {
         await newsLetterAPI.update(modal.data._id, fd);
-        setNotice({ type: "success", message: "Newsletter updated successfully." });
+        setNotice({
+          type: "success",
+          message: "Newsletter updated successfully.",
+        });
       } else {
         await newsLetterAPI.create(fd);
-        setNotice({ type: "success", message: "Newsletter created successfully." });
+        setNotice({
+          type: "success",
+          message: "Newsletter created successfully.",
+        });
       }
 
       setModal(null);
@@ -359,7 +372,8 @@ const AdminNewsLetter = () => {
       setNotice({
         type: "error",
         message:
-          error.response?.data?.message || error.message ||
+          error.response?.data?.message ||
+          error.message ||
           "Unable to save newsletter.",
       });
     } finally {
@@ -379,7 +393,8 @@ const AdminNewsLetter = () => {
       setNotice({
         type: "error",
         message:
-          error.response?.data?.message || error.message ||
+          error.response?.data?.message ||
+          error.message ||
           "Failed to delete newsletter.",
       });
     } finally {
@@ -415,7 +430,8 @@ const AdminNewsLetter = () => {
             Newsletter Management
           </h1>
           <p className="max-w-2xl mt-2 text-sm text-slate-500">
-            Create, edit, and publish newsletters, alumni stories, accolades, and institute updates.
+            Create, edit, and publish newsletters, alumni stories, accolades,
+            and institute updates.
           </p>
         </div>
 
@@ -514,7 +530,8 @@ const AdminNewsLetter = () => {
                             {item.title}
                           </h2>
                           <p className="text-sm text-slate-500 mt-1">
-                            {item.author || "Unknown author"} · {new Date(item.date).toLocaleDateString()}
+                            {item.author || "Unknown author"} ·{" "}
+                            {new Date(item.date).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
@@ -575,7 +592,9 @@ const AdminNewsLetter = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setModal({ type: "delete", data: item })}
+                          onClick={() =>
+                            setModal({ type: "delete", data: item })
+                          }
                           className="inline-flex h-10 min-w-[110px] items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 text-sm font-semibold text-red-700 hover:bg-red-100"
                         >
                           <Trash2 size={14} /> Delete
@@ -596,7 +615,9 @@ const AdminNewsLetter = () => {
           <div className="space-y-4">
             <div className="rounded-3xl border border-slate-100 bg-slate-50 px-4 py-4">
               <p className="text-sm text-slate-500">Total newsletters</p>
-              <p className="mt-2 text-3xl font-semibold text-slate-900">{items.length}</p>
+              <p className="mt-2 text-3xl font-semibold text-slate-900">
+                {items.length}
+              </p>
             </div>
             <div className="rounded-3xl border border-slate-100 bg-slate-50 px-4 py-4">
               <p className="text-sm text-slate-500">Selected category</p>
