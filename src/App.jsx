@@ -32,6 +32,7 @@ const YearAlbumsPage = lazy(() => import("./pages/YearAlbumsPage"));
 const AlumniRegistration = lazy(
   () => import("./pages/alumni/AlumniRegistration"),
 );
+const AlumniDashboard = lazy(() => import("./pages/alumni/AlumniDashboard"));
 const AlumniLogin = lazy(() => import("./pages/alumni/AlumniLogin"));
 const ForgotPassword = lazy(() => import("./pages/alumni/ForgotPassword"));
 const AlumniProfile = lazy(() => import("./pages/alumni/AlumniProfile"));
@@ -39,6 +40,7 @@ const AlumniDirectory = lazy(() => import("./pages/alumni/AlumniDirectory"));
 const AlumniMap = lazy(() => import("./pages/alumni/AlumniMap"));
 const MyDonationHistory = lazy(() => import("./pages/alumni/MyDonationHistory"));
 const AlumniChapters = lazy(() => import("./pages/alumni/AlumniChapters"));
+const NotificationInbox = lazy(() => import("./pages/alumni/NotificationInbox"));
 
 // ═══════════════════════════════════════════════════════════════════════
 // ADMIN PAGES
@@ -124,6 +126,15 @@ export default function App() {
 
             {/* ALUMNI AUTH */}
             <Route
+                path="alumni/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <AlumniDashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+            <Route
               path="alumni/register"
               element={
                 <PublicOnlyRoute>
@@ -139,7 +150,7 @@ export default function App() {
                 </PublicOnlyRoute>
               }
             />
-            <Route path="alumni/forgot-password" element={<ForgotPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             {/* ALUMNI PROTECTED */}
             <Route
@@ -179,6 +190,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <AlumniChapters />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="alumni/notifications"
+              element={
+                <ProtectedRoute>
+                  <NotificationInbox />
                 </ProtectedRoute>
               }
             />
