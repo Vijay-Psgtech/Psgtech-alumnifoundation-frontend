@@ -14,7 +14,6 @@ const AlumniDonations = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   usePageTitle("Make a Donation");
-  
 
   const [donationAmount, setDonationAmount] = useState("");
   const [purpose, setPurpose] = useState("general");
@@ -25,9 +24,21 @@ const AlumniDonations = () => {
   const [loadingDonations, setLoadingDonations] = useState(true);
 
   const donationPurposes = [
-    { id: "general", label: "General Fund", description: "Support PSG overall" },
-    { id: "scholarship", label: "Scholarship", description: "Student scholarships" },
-    { id: "infrastructure", label: "Infrastructure", description: "Building improvements" },
+    {
+      id: "general",
+      label: "General Fund",
+      description: "Support PSG overall",
+    },
+    {
+      id: "scholarship",
+      label: "Scholarship",
+      description: "Student scholarships",
+    },
+    {
+      id: "infrastructure",
+      label: "Infrastructure",
+      description: "Building improvements",
+    },
     { id: "research", label: "Research", description: "Research initiatives" },
   ];
 
@@ -55,7 +66,7 @@ const AlumniDonations = () => {
 
   const handleDonation = async (e) => {
     e.preventDefault();
-    
+
     if (!donationAmount || Number(donationAmount) <= 0) {
       setError("Please enter a valid amount");
       return;
@@ -76,7 +87,7 @@ const AlumniDonations = () => {
         setSuccess(true);
         setDonationAmount("");
         setPurpose("general");
-        
+
         // Reload donations
         setTimeout(() => {
           loadDonationHistory();
@@ -84,7 +95,9 @@ const AlumniDonations = () => {
         }, 3000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Donation failed. Please try again.");
+      setError(
+        err.response?.data?.message || "Donation failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -725,8 +738,8 @@ const AlumniDonations = () => {
                       onClick={() => setDonationAmount(String(tier.amount))}
                       disabled={loading}
                     >
-                      <span className="tier-emoji">{tier.emoji}</span>
-                      ₹{tier.amount.toLocaleString()}
+                      <span className="tier-emoji">{tier.emoji}</span>₹
+                      {tier.amount.toLocaleString()}
                     </button>
                   ))}
                 </div>
@@ -752,7 +765,11 @@ const AlumniDonations = () => {
               </div>
 
               {/* Submit */}
-              <button type="submit" className="donate-btn" disabled={loading || !donationAmount}>
+              <button
+                type="submit"
+                className="donate-btn"
+                disabled={loading || !donationAmount}
+              >
                 <Heart size={18} />
                 {loading ? "Processing..." : "Donate Now"}
               </button>
@@ -772,14 +789,17 @@ const AlumniDonations = () => {
                   >
                     <div className="donation-info">
                       <div className="donation-purpose">
-                        {donationPurposes.find(p => p.id === donation.purpose)?.label || "Donation"}
+                        {donationPurposes.find((p) => p.id === donation.purpose)
+                          ?.label || "Donation"}
                       </div>
                       <div className="donation-date">
                         {new Date(donation.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                     <div className="donation-sum">
-                      <div className="donation-amount">₹{donation.amount.toLocaleString()}</div>
+                      <div className="donation-amount">
+                        ₹{donation.amount.toLocaleString()}
+                      </div>
                     </div>
                   </motion.div>
                 ))}

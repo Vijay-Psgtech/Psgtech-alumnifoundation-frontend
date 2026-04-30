@@ -311,8 +311,6 @@ const AlumniDetailModal = ({ alumni, isOpen, onClose, apiBase, viewer }) => {
               gap: 8,
             }}
           >
-            
-
             <button
               onClick={onClose}
               style={{
