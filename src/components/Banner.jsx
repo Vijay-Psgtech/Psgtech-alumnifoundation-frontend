@@ -265,7 +265,7 @@ const Banner = () => {
           >
             <div className="banner-eyebrow">
               <span className="eyebrow-dot" />
-              PSG Tech Alumni Foundation · Est. 2016
+              PSG Tech Alumni Association · Est. 2016
             </div>
           </motion.div>
 

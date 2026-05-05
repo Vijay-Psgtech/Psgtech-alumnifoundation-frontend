@@ -94,7 +94,7 @@ const Values = () => (
           viewport={{ once: true }}
         >
           <p className="vals-footer-text">
-            "These core values form the foundation of everything we do —
+            "These core values form the Association of everything we do —
             ensuring that our <strong>actions align with our mission</strong> to
             support PSG Tech's excellence and development."
           </p>

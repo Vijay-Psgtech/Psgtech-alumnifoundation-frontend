@@ -435,7 +435,7 @@ export default function NavBar() {
             </div>
             <div className="nav-logo-text">
               <div className="nav-logo-main">PSG Tech Alumni</div>
-              <div className="nav-logo-sub">Foundation</div>
+              <div className="nav-logo-sub">Association</div>
             </div>
           </Link>
 

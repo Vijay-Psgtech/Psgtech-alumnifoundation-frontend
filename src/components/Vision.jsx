@@ -92,7 +92,7 @@ const Vision = () => (
             for every student who walks through its doors.
           </p>
           <div className="vision-divider" />
-          <div className="vision-footer">Foundation Core Goal</div>
+          <div className="vision-footer">Association Core Goal</div>
           <div className="vision-stats">
             {[
               { v: "Excellence", l: "First Priority" },

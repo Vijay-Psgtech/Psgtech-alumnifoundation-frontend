@@ -1,4 +1,4 @@
-// card.jsx — PSG Alumni Foundation Design System
+// card.jsx — PSG Alumni Association Design System
 import React from "react";
 
 export function Card({ children, className = "", dark = false, accent = false }) {

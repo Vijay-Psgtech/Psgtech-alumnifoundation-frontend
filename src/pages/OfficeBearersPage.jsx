@@ -69,7 +69,7 @@ const OfficeBearersPage = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
           >
-            Meet the dedicated leaders steering the PSG Tech Alumni Foundation
+            Meet the dedicated leaders steering the PSG Tech Alumni Association
             toward greater excellence and impact.
           </motion.p>
         </motion.div>
@@ -113,7 +113,7 @@ const OfficeBearersPage = () => {
               <div className="mt-6 flex items-center gap-3">
                 <div className="w-12 h-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600" />
                 <span className="text-sm font-semibold text-slate-600 uppercase tracking-wider">
-                  Foundation Leadership
+                  Association Leadership
                 </span>
               </div>
             </motion.div>
@@ -200,7 +200,7 @@ const OfficeBearersPage = () => {
           </h3>
           <p className="text-lg text-slate-700 leading-relaxed">
             Our office bearers bring diverse expertise from academia, industry,
-            and philanthropy. Together, they champion the foundation's mission
+            and philanthropy. Together, they champion the Association's mission
             to support PSG Tech's continued growth and create lasting impact for
             future generations.
           </p>

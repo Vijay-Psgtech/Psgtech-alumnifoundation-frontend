@@ -186,7 +186,7 @@ export default function AboutPage() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="ap-ey">PSG Tech Alumni Foundation</div>
+              <div className="ap-ey">PSG Tech Alumni Association</div>
               <h1 className="ap-h1">
                 Connecting <em>Techians</em>
                 <br />
@@ -214,7 +214,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               <div className="hero-if">
-                <img src={AboutImg} alt="PSG Tech Alumni Foundation" />
+                <img src={AboutImg} alt="PSG Tech Alumni Association"  />
               </div>
               <div className="hc hc-tl" />
               <div className="hc hc-br" />
@@ -228,48 +228,19 @@ export default function AboutPage() {
                 Built on <em>Legacy</em>, Driven by Purpose
               </h2>
               <p className="ap-p">
-                The PSG TECH Alumni Foundation, a long felt need for a financial
-                arm of PSG Tech Alumni Association, was registered on{" "}
-                <strong>19th October 2016</strong> as a not-for-profit Trust
-                under the laws of the State of Tamil Nadu.
+                <strong>PSG Tech Alumni Association</strong> through its full fledged office at Coimbatore and through its chapters spread over the country and abroad has been systemically carrying out the task of bringing together the alumni and establishing their continuous rapport with the institution.
               </p>
               <p className="ap-p">
-                The Foundation was established to provide an avenue through
-                which alumni and well-wishers may contribute financially through
-                gifts, grants, and bequests to benefit present and future
-                students — providing scholarship assistance and funding special
-                projects like PSG-GRD Science & Technology Museum and Research
-                Centre.
+                PSG College of Technology is one of the most distinctive colleges in Tamilnadu and India. For Alumni, the years spent as a student are among the most exciting and challenging of our lives. We all leave PSG with strong feelings about the College and a sense that we have formed a unique identity. At few other colleges in the country are the alums known by a distinctive name. But all of us, from the moment we enter PSG, become Techians and we stay that way for the rest of our lives.
               </p>
               <p className="ap-p">
-                The Foundation's purpose is to receive gifts for the College /
-                Alumni Association and to hold these contributed funds in
-                perpetual endowment. Only the accrued interest and/or income
-                from the funds is expended unless otherwise designated.
+                One of the purposes of the Alumni Association is to encourage and promote that connection. Its goal is to keep that connection alive and to give it a practical quality by organizing programs and services for Alumni. Another purpose is to represent Alumni views to the College and to develop ways that Alumni can be involved with current students.
               </p>
               <p className="ap-p">
-                The Foundation is managed by a Board of Trustees comprising six
-                senior alumni and three ex-officio Trustees. The Board provides
-                direction for major functions necessary to carry out the mission
-                of the Foundation.
+                The founder Principal of the PSG Tech Prof. G. R. Damodaran took special care to enhance the reputation of PSG Tech Alumni Association. With the strong support by the PSG Management and the continuous involvement of the Principal and the faculty of PSG Tech, the alumni association is carrying out various tasks throughout the year. These tasks aim at not only bringing the members to a close family atmosphere but also carrying out various service activities.
               </p>
-              <ol className="ap-ol">
-                <li>
-                  Award of Scholarships to the needy and deserving students.
-                </li>
-                <li>
-                  Setting up and Managing the PSG-GRD Museum at Neelambur
-                  campus.
-                </li>
-                <li>
-                  Any other activity to support PSG Tech to achieve excellence
-                  in education and research including fellowships, centers of
-                  excellence, new programs, and special projects.
-                </li>
-              </ol>
-              <p className="ap-p" style={{ marginTop: 18 }}>
-                The foundation abides by rules and regulations followed in the{" "}
-                <strong>Indian Trusts Act, 1882</strong>.
+              <p className="ap-p">
+                Every year the PSG Tech Alumni Association at Coimbatore organizes events like Alumni Day, Young Alumni Meet, Technical Meetings, Entrepreneurship development programmes and product exhibitions. The Association has been conducting a state level talent test called GRD Talent test for the 9th and 10th standard school students for the past 23years. The association provides financial support to poor students through scholarships. It conducts a state level GRD Inter Collegiate Tamil Debate to the college students for past 8 years. It's operating Alumni – instituted awards to be given for students of academic excellence.
               </p>
 
               <div className="sl" style={{ marginTop: 48 }}>
@@ -434,7 +405,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
           >
             <div>
-              <div className="cb-h">Support the Foundation</div>
+              <div className="cb-h">Support the Association</div>
               <div className="cb-p">
                 Your gift helps transform student lives — scholarships, labs,
                 and more.
