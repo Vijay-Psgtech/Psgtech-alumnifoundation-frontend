@@ -142,7 +142,7 @@ const ContactUsPage = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
           >
-            Have questions about the foundation? We'd love to hear from you.
+            Have questions about the Association? We'd love to hear from you.
             Reach out and let's connect.
           </motion.p>
         </motion.div>
@@ -319,7 +319,7 @@ const ContactUsPage = () => {
                 Get in Touch
               </h2>
               <p className="text-slate-600 text-lg leading-relaxed mb-4">
-                Have any questions about the PSG Tech Alumni Foundation? Our
+                Have any questions about the PSG Tech Alumni Association? Our
                 team is ready to help. Whether you're interested in donating,
                 connecting with fellow alumni, or learning more about our
                 initiatives, we'd love to hear from you.

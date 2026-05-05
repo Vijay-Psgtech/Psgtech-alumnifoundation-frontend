@@ -31,7 +31,7 @@ const Footer = () => (
     >
       <div className="foot-inner">
         <div>
-          <div className="foot-brand-name">PSG Tech Alumni Foundation</div>
+          <div className="foot-brand-name">PSG Tech Alumni Association</div>
           <p className="foot-brand-desc">
             A not-for-profit Trust registered under Tamil Nadu law, dedicated to
             strengthening PSG Tech's legacy for future generations.
@@ -79,7 +79,7 @@ const Footer = () => (
       </div>
       <div className="foot-bottom">
         <div className="foot-copy">
-          © {new Date().getFullYear()} PSG Tech Alumni Foundation. All Rights
+          © {new Date().getFullYear()} PSG Tech Alumni Association. All Rights
           Reserved.
         </div>
         <div className="foot-dev">

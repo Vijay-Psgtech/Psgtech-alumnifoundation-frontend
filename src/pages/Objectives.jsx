@@ -66,7 +66,7 @@ const ObjectivesPage = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto"
           >
-            The PSG Tech Alumni Foundation is committed to advancing education,
+            The PSG Tech Alumni Association is committed to advancing education,
             supporting students, and fostering research excellence.
           </motion.p>
         </motion.div>
@@ -190,7 +190,7 @@ const ObjectivesPage = () => {
           </h3>
           <p className="text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
             Through focused objectives and unwavering principles, the PSG Tech
-            Alumni Foundation works to strengthen PSG Tech's academic
+            Alumni Association works to strengthen PSG Tech's academic
             excellence, support deserving students, and create a vibrant alumni
             community that makes a meaningful difference in the world.
           </p>

@@ -1,13 +1,13 @@
-# PSG Tech Alumni Foundation
+# PSG Tech Alumni Association
 
-A modern, responsive web platform for the PSG Tech Alumni Foundation built with React, Vite, and Tailwind CSS.
+A modern, responsive web platform for the PSG Tech Alumni Association built with React, Vite, and Tailwind CSS.
 
 
 ## 🎯 Features
 
 ### Core Features
 - ✅ **Banner Section** - Animated hero with background image and overlay effects
-- ✅ **About Page** - Foundation overview with statistics and mission highlights
+- ✅ **About Page** - Association overview with statistics and mission highlights
 - ✅ **Vision & Values** - Strategic components with animations
 - ✅ **Objectives** - Interactive expandable cards with 8 core objectives
 - ✅ **Contact Us** - Fully responsive contact form with location map

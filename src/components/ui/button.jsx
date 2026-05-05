@@ -1,4 +1,4 @@
-// button.jsx — PSG Alumni Foundation Design System
+// button.jsx — PSG Alumni Association Design System
 import React from "react";
 
 export function Button({ children, className = "", onClick, disabled = false, type = "button", variant = "gold" }) {

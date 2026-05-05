@@ -715,7 +715,7 @@ const DonatePage = () => {
         amount: amt,
         currency: cur,
         order_id: razorpayOrderId,
-        name: "PSG TECH Alumni Foundation",
+        name: "PSG TECH Alumni Association",
         description: `Joy of Giving — ${activeCause?.title}`,
         handler: async (pr) => {
           try {
@@ -856,7 +856,7 @@ const DonatePage = () => {
               education & opportunity.
             </motion.h1>
             <motion.p variants={fadeUp(0.16)}>
-              Every contribution to PSG TECH Alumni Foundation powers
+              Every contribution to PSG TECH Alumni Association powers
               scholarships, research, and infrastructure — shaping tomorrow's
               leaders today.
             </motion.p>
