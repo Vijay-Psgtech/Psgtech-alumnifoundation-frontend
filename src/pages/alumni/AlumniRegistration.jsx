@@ -1239,9 +1239,7 @@ const AlumniRegistration = () => {
                             <option value="">Select Programme Type</option>
                             <option>UG</option>
                             <option>PG</option>
-                            <option>MPhil</option>
                             <option>PHD</option>
-                            <option>PUC</option>
                           </select>
                           <ChevronRight
                             size={14}

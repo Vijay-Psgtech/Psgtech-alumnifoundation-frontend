@@ -592,6 +592,7 @@ const DepartmentTab = ({ onError, onSuccess }) => {
                     <option value="">-- Select --</option>
                     <option value="UG">UG (Undergraduate)</option>
                     <option value="PG">PG (Postgraduate)</option>
+                    <option value="PHD">PHD (Doctoral)</option>
                   </select>
                   {formErrors.programmeType && (
                     <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
