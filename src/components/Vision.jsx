@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Target } from "lucide-react";
 
 const Vision = () => (
   <>
@@ -28,80 +27,27 @@ const Vision = () => (
       @media(max-width:600px){.vision-card{padding:36px 24px;}}
     `}</style>
     <section className="vision-s">
-      <div
-        className="vision-orb"
-        style={{
-          width: 420,
-          height: 420,
-          top: -100,
-          right: -100,
-          background: "rgba(201,168,76,.055)",
-        }}
-      />
-      <div
-        className="vision-orb"
-        style={{
-          width: 320,
-          height: 320,
-          bottom: -80,
-          left: -80,
-          background: "rgba(70,110,220,.045)",
-        }}
-      />
+      <div className="vision-orb" style={{width:420,height:420,top:-100,right:-100,background:"rgba(201,168,76,.055)"}}/>
+      <div className="vision-orb" style={{width:320,height:320,bottom:-80,left:-80,background:"rgba(70,110,220,.045)"}}/>
       <div className="vision-inner">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75 }}
-          viewport={{ once: true }}
-        >
+        <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} transition={{duration:.75}} viewport={{once:true}}>
           <div className="vision-eyebrow">
-            <div className="vline" />
-            Our Vision
-            <div
-              className="vline"
-              style={{
-                background:
-                  "linear-gradient(90deg,rgba(201,168,76,.65),transparent)",
-              }}
-            />
+            <div className="vline"/>Our Vision<div className="vline" style={{background:"linear-gradient(90deg,rgba(201,168,76,.65),transparent)"}}/>
           </div>
         </motion.div>
-        <motion.h2
-          className="vision-h2"
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          What We <em>Aspire</em>
-          <br />
-          to Achieve
+        <motion.h2 className="vision-h2" initial={{opacity:0,y:32}} whileInView={{opacity:1,y:0}} transition={{duration:.8,delay:.1}} viewport={{once:true}}>
+          What We <em>Aspire</em><br/>to Achieve
         </motion.h2>
-        <motion.div
-          className="vision-card"
-          initial={{ opacity: 0, y: 38 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
+        <motion.div className="vision-card" initial={{opacity:0,y:38}} whileInView={{opacity:1,y:0}} transition={{duration:.9,delay:.2}} viewport={{once:true}}>
           <div className="vision-qmark">"</div>
           <p className="vision-text">
-            To strive to be the <strong>major support for PSG Tech's</strong>{" "}
-            commitment to provide the <strong>best learning environment</strong>{" "}
-            for every student who walks through its doors.
+            To strive to be the <strong>major support for PSG College of Technology & Polytechnic College's mission</strong> of delivering <strong>world-class education and an exceptional learning environment</strong> for every student.
           </p>
-          <div className="vision-divider" />
-          <div className="vision-footer">Association Core Goal</div>
+          <div className="vision-divider"/>
+          <div className="vision-footer">Foundation Core Goal</div>
           <div className="vision-stats">
-            {[
-              { v: "Excellence", l: "First Priority" },
-              { v: "Sustainable", l: "Impact Model" },
-            ].map((s) => (
-              <div className="vstat" key={s.l}>
-                <div className="vstat-val">{s.v}</div>
-                <div className="vstat-lbl">{s.l}</div>
-              </div>
+            {[{v:"Excellence",l:"First Priority"},{v:"Sustainable",l:"Impact Model"}].map(s=>(
+              <div className="vstat" key={s.l}><div className="vstat-val">{s.v}</div><div className="vstat-lbl">{s.l}</div></div>
             ))}
           </div>
         </motion.div>

@@ -3,27 +3,9 @@ import { motion } from "framer-motion";
 import { Heart, Zap, Leaf } from "lucide-react";
 
 const vals = [
-  {
-    Icon: Heart,
-    title: "Integrity",
-    desc: "We conduct ourselves with honesty, transparency, and ethical principles in all our endeavors — building trust across generations.",
-    accent: "#c9a84c",
-    bg: "rgba(201,168,76,.05)",
-  },
-  {
-    Icon: Zap,
-    title: "Support & Commitment",
-    desc: "We make every effort to garner support for the benefit of PSG Tech and its stakeholders, standing firm in our commitments.",
-    accent: "#7eb8f7",
-    bg: "rgba(126,184,247,.05)",
-  },
-  {
-    Icon: Leaf,
-    title: "Passion & Growth",
-    desc: "We work passionately for the sustainable development and continuous growth of PSG Tech, inspiring alumni to contribute meaningfully.",
-    accent: "#7edfa0",
-    bg: "rgba(126,223,160,.05)",
-  },
+  {Icon:Heart,title:"Integrity",desc:"We conduct ourselves with honesty, transparency, and ethical principles in all our endeavors — building trust across generations.",accent:"#c9a84c",bg:"rgba(201,168,76,.05)"},
+  {Icon:Zap,title:"Support & Commitment",desc:"We make every effort to garner support for the benefit of PSG Tech and its stakeholders, standing firm in our commitments.",accent:"#7eb8f7",bg:"rgba(126,184,247,.05)"},
+  {Icon:Leaf,title:"Passion & Growth",desc:"We work passionately for the sustainable development and continuous growth of PSG Tech, inspiring alumni to contribute meaningfully.",accent:"#7edfa0",bg:"rgba(126,223,160,.05)"},
 ];
 
 const Values = () => (
@@ -54,49 +36,24 @@ const Values = () => (
     `}</style>
     <section className="vals-s">
       <div className="vals-inner">
-        <motion.div
-          className="vals-header"
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
+        <motion.div className="vals-header" initial={{opacity:0,y:28}} whileInView={{opacity:1,y:0}} transition={{duration:.8}} viewport={{once:true}}>
           <div className="vals-eyebrow">Our Values</div>
-          <h2 className="vals-h2">
-            The Principles That <em>Guide Us</em>
-          </h2>
+          <h2 className="vals-h2">The Principles That <em>Guide Us</em></h2>
         </motion.div>
         <div className="vals-grid">
-          {vals.map(({ Icon, title, desc, accent, bg }, i) => (
-            <motion.div
-              key={title}
-              className="val-card"
-              style={{ "--vacc": accent, "--vbg": bg }}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: i * 0.11 }}
-              viewport={{ once: true }}
-            >
-              <div className="val-icon-wrap">
-                <Icon size={24} style={{ color: accent }} />
-              </div>
+          {vals.map(({Icon,title,desc,accent,bg},i)=>(
+            <motion.div key={title} className="val-card" style={{"--vacc":accent,"--vbg":bg}}
+              initial={{opacity:0,y:40}} whileInView={{opacity:1,y:0}} transition={{duration:.75,delay:i*.11}} viewport={{once:true}}>
+              <div className="val-icon-wrap"><Icon size={24} style={{color:accent}}/></div>
               <h3 className="val-title">{title}</h3>
               <p className="val-desc">{desc}</p>
-              <div className="val-num">0{i + 1}</div>
+              <div className="val-num">0{i+1}</div>
             </motion.div>
           ))}
         </div>
-        <motion.div
-          className="vals-footer"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
+        <motion.div className="vals-footer" initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} transition={{duration:.75,delay:.2}} viewport={{once:true}}>
           <p className="vals-footer-text">
-            "These core values form the Association of everything we do —
-            ensuring that our <strong>actions align with our mission</strong> to
-            support PSG Tech's excellence and development."
+            "These core values form the foundation of everything we do — ensuring that our <strong>actions align with our mission</strong> to support PSG Tech's excellence and development."
           </p>
         </motion.div>
       </div>

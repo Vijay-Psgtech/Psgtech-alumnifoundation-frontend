@@ -1,46 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Compass, Users, DollarSign, Briefcase, Building2 } from "lucide-react";
+import { Users, DollarSign, Briefcase, Building2 } from "lucide-react";
 
 const pillars = [
-  {
-    Icon: Users,
-    n: "01",
-    title: "Foster Active Interest",
-    desc: "Stimulate and foster active interest among alumni and friends to volunteer in support of PSG Tech.",
-  },
-  {
-    Icon: DollarSign,
-    n: "02",
-    title: "Consistent Fund Flow",
-    desc: "Create and maintain a consistent flow of funds to achieve the Vision and support institutional growth.",
-  },
-  {
-    Icon: Briefcase,
-    n: "03",
-    title: "Secure & Manage Funds",
-    desc: "Secure, manage, and disburse private funds strategically to meet organizational objectives.",
-  },
+  {Icon:Users,n:"01",title:"Foster Alumni Engagement",desc:"Stimulate and foster active interest among alumni and friends to volunteer and support PSG Tech initiatives."},
+  {Icon:DollarSign,n:"02",title:"Consistent Fund Flow",desc:"Create and maintain a consistent flow of funds to achieve the Vision and support institutional growth."},
+  {Icon:Briefcase,n:"03",title:"Secure & Manage Funds",desc:"Secure, manage, and disburse private funds strategically to meet organizational objectives."},
 ];
+
 const projects = [
-  {
-    Icon: Users,
-    title: "Scholarship Augmentation",
-    desc: "Enhance and expand scholarship programs to support deserving students in pursuing excellence.",
-    emoji: "🎓",
-  },
-  {
-    Icon: Building2,
-    title: "GRD Science & Technology Museum",
-    desc: "Establish a comprehensive Science and Technology Museum showcasing innovation.",
-    emoji: "🏛️",
-  },
-  {
-    Icon: Briefcase,
-    title: "Research Centre",
-    desc: "Set up a dedicated Research Centre to foster groundbreaking research and development initiatives.",
-    emoji: "🔬",
-  },
+  {title:"Scholarship Augmentation",desc:"Enhance and expand scholarship programs to support deserving students in pursuing excellence.",emoji:"🎓"},
+  {title:"GRD Science & Technology Museum",desc:"Establish a comprehensive Science and Technology Museum showcasing innovation and experiential learning.",emoji:"🏛️"},
+  {title:"Research & Innovation Centre",desc:"Set up a dedicated Research Centre to foster groundbreaking research and development initiatives.",emoji:"🔬"},
 ];
 
 const Mission = () => (
@@ -80,62 +51,23 @@ const Mission = () => (
       @media(max-width:820px){.pillars-grid{grid-template-columns:1fr;}.proj-grid{grid-template-columns:1fr;}.miss-cta{padding:36px 20px;}}
     `}</style>
     <section className="miss-s">
-      <div
-        style={{
-          position: "absolute",
-          top: -180,
-          right: -180,
-          width: 560,
-          height: 560,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle,rgba(201,168,76,.05) 0%,transparent 68%)",
-          pointerEvents: "none",
-        }}
-      />
+      <div style={{position:"absolute",top:-180,right:-180,width:560,height:560,borderRadius:"50%",background:"radial-gradient(circle,rgba(201,168,76,.05) 0%,transparent 68%)",pointerEvents:"none"}}/>
       <div className="miss-inner">
-        <motion.div
-          className="miss-header"
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
+        <motion.div className="miss-header" initial={{opacity:0,y:28}} whileInView={{opacity:1,y:0}} transition={{duration:.8}} viewport={{once:true}}>
           <div className="miss-eyebrow">Our Mission</div>
-          <h2 className="miss-h2">
-            How We Make an <em>Impact</em>
-          </h2>
-          <p className="miss-sub">
-            The strategic pillars that drive our work forward
-          </p>
+          <h2 className="miss-h2">How We Make an <em>Impact</em></h2>
+          <p className="miss-sub">The strategic pillars that drive our work forward</p>
         </motion.div>
         <div className="miss-section-lbl">The Trust Will</div>
-        <motion.div
-          className="pillars-grid"
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          {pillars.map(({ n, title, desc }) => (
-            <div className="pillar" key={n}>
-              <div className="pillar-n">{n}</div>
-              <h4 className="pillar-title">{title}</h4>
-              <p className="pillar-desc">{desc}</p>
-            </div>
+        <motion.div className="pillars-grid" initial={{opacity:0,y:32}} whileInView={{opacity:1,y:0}} transition={{duration:.8,delay:.1}} viewport={{once:true}}>
+          {pillars.map(({n,title,desc})=>(
+            <div className="pillar" key={n}><div className="pillar-n">{n}</div><h4 className="pillar-title">{title}</h4><p className="pillar-desc">{desc}</p></div>
           ))}
         </motion.div>
         <div className="miss-section-lbl">Major Projects to Begin With</div>
         <div className="proj-grid">
-          {projects.map(({ emoji, title, desc }, i) => (
-            <motion.div
-              key={title}
-              className="proj-card"
-              initial={{ opacity: 0, y: 36 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: i * 0.1 }}
-              viewport={{ once: true }}
-            >
+          {projects.map(({emoji,title,desc},i)=>(
+            <motion.div key={title} className="proj-card" initial={{opacity:0,y:36}} whileInView={{opacity:1,y:0}} transition={{duration:.75,delay:i*.1}} viewport={{once:true}}>
               <span className="proj-emoji">{emoji}</span>
               <h4 className="proj-title">{title}</h4>
               <p className="proj-desc">{desc}</p>
@@ -143,33 +75,11 @@ const Mission = () => (
             </motion.div>
           ))}
         </div>
-        <motion.div
-          className="miss-cta"
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75 }}
-          viewport={{ once: true }}
-        >
+        <motion.div className="miss-cta" initial={{opacity:0,y:28}} whileInView={{opacity:1,y:0}} transition={{duration:.75}} viewport={{once:true}}>
           <h3 className="miss-cta-h">Join Our Mission</h3>
-          <p className="miss-cta-p">
-            Be part of our collective effort to support PSG Tech's growth and
-            excellence for the next generation.
-          </p>
-          <button
-            className="miss-cta-btn"
-            onClick={() => (window.location.href = "/donate")}
-          >
-            Get Involved Today{" "}
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+          <p className="miss-cta-p">Be part of our collective effort to support PSG Tech's growth and excellence for the next generation of leaders and innovators.</p>
+          <button className="miss-cta-btn" onClick={()=>window.location.href="/donate"}>
+            Get Involved Today <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </motion.div>
       </div>
