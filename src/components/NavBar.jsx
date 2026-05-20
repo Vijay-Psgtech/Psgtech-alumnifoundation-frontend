@@ -53,6 +53,14 @@ export default function NavBar() {
         { label: "Photo Albums", path: "/events/albums" },
       ],
     },
+    {
+      label: "Access",
+      submenu: [
+        { label: "PSG TECH EVENTS ", path: "https://alumni.psgtech.ac.in/events" },
+        { label: "PSG TECH", path: "https://alumni.psgtech.ac.in/" },
+        { label: "PSG TECH ALUMNI GALLERY", path: "https://alumni.psgtech.ac.in/gallery" },
+      ],
+    },
     { label: "Contact", path: "/contact" },
     {
       label: "Alumni",
@@ -662,7 +670,7 @@ export default function NavBar() {
                   Alumni Login
                 </Link>
                 <Link to="/donate" onClick={closeAll} className="m-btn-gold">
-                  Donate Now
+                  Contibute  Now
                 </Link>
               </div>
             )}
