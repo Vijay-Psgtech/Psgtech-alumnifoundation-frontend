@@ -1,826 +1,533 @@
-// frontend/src/pages/DonatePage.jsx
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, DollarSign, IndianRupee, AlertCircle, CheckCircle } from "lucide-react";
-import { donationAPI } from "../services/api";
-// import "./donate.css";
+import { Heart, Target, Users, Award, ArrowRight } from "lucide-react";
+
+const DonationImpact = [
+  { amount: "₹5,000", impact: "One Student Scholarship", icon: "🎓" },
+  { amount: "₹10,000", impact: "Monthly Mentoring Program", icon: "🤝" },
+  { amount: "₹25,000", impact: "Workshop & Training Session", icon: "📚" },
+  { amount: "₹50,000", impact: "Research Project Support", icon: "🔬" },
+  { amount: "₹1,00,000+", impact: "Annual Scholarship Fund", icon: "🏆" }
+];
+
+const DonationWays = [
+  { title: "Online Payment", desc: "Direct donation via secure payment gateway (Razorpay/PayU)", icon: "💳" },
+  { title: "Bank Transfer", desc: "Direct deposit to foundation account", icon: "🏦" },
+  { title: "Cheque/Draft", desc: "Payable to PSG Tech Alumni Foundation", icon: "✏️" },
+  { title: "Corporate CSR", desc: "Align your CSR initiatives with our programs", icon: "🏢" }
+];
 
 const DonatePage = () => {
-  const [donationAmount, setDonationAmount] = useState("");
-  const [currency, setCurrency] = useState("INR");
-  const [paymentMethod, setPaymentMethod] = useState("razorpay");
-  const [donorName, setDonorName] = useState("");
-  const [donorEmail, setDonorEmail] = useState("");
+  const [donationAmount, setDonationAmount] = useState(10000);
+  const [isMonthly, setIsMonthly] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [isAnonymous, setIsAnonymous] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  // ✅ Validate form
-  const validateForm = useCallback(() => {
-    if (!donationAmount || Number(donationAmount) <= 0) {
-      setError("Please enter a valid donation amount");
-      return false;
-    }
-
-    if (!isAnonymous && (!donorName || !donorEmail)) {
-      setError("Please enter your name and email");
-      return false;
-    }
-
-    if (!isAnonymous && !donorEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setError("Please enter a valid email address");
-      return false;
-    }
-
-    return true;
-  }, [donationAmount, isAnonymous, donorName, donorEmail]);
-
-  // ✅ Handle Razorpay payment
-  const handleRazorpayPayment = useCallback(async () => {
-    setLoading(true);
-    setError("");
-
-    try {
-      // Create donation record
-      const donationData = {
-        amount: parseFloat(donationAmount),
-        currency: "INR",
-        paymentMethod: "razorpay",
-        donorName: isAnonymous ? "Anonymous" : donorName,
-        donorEmail: isAnonymous ? "anonymous@psgtech.ac.in" : donorEmail,
-        message: message || "",
-        isAnonymous,
-      };
-
-      // Call backend to create donation & get Razorpay order
-      const response = await donationAPI.createDonation(donationData);
-
-      const { razorpayOrderId, amount, currency: orderCurrency } = response.data;
-
-      if (!razorpayOrderId) {
-        setError("Failed to create payment order. Please try again.");
-        setLoading(false);
-        return;
-      }
-
-      // ✅ Open Razorpay payment modal
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: amount,
-        currency: orderCurrency,
-        order_id: razorpayOrderId,
-        name: "PSG Tech Alumni Foundation",
-        description: "Support PSG Tech's Excellence & Student Aid",
-        image: "/psg_logo.png",
-        handler: async (paymentResponse) => {
-          try {
-            // Verify payment with backend
-            const verifyResponse = await donationAPI.verifyRazorpayPayment({
-              razorpay_order_id: paymentResponse.razorpay_order_id,
-              razorpay_payment_id: paymentResponse.razorpay_payment_id,
-              razorpay_signature: paymentResponse.razorpay_signature,
-            });
-
-            if (verifyResponse.data.success) {
-              setSuccess(true);
-              setDonationAmount("");
-              setDonorName("");
-              setDonorEmail("");
-              setMessage("");
-              setTimeout(() => setSuccess(false), 5000);
-            } else {
-              setError("Payment verification failed. Please contact support.");
-            }
-          } catch (err) {
-            console.error("Payment verification error:", err);
-            setError("Payment verification failed. Please try again.");
-          } finally {
-            setLoading(false);
-          }
-        },
-        prefill: {
-          name: isAnonymous ? "Anonymous Donor" : donorName,
-          email: isAnonymous ? "" : donorEmail,
-        },
-        notes: {
-          message: message,
-          isAnonymous: isAnonymous,
-        },
-        theme: {
-          color: "#667eea",
-        },
-      };
-
-      // Load Razorpay script if not loaded
-      if (typeof Razorpay === "undefined") {
-        const script = document.createElement("script");
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
-        script.onload = () => {
-          const rzp = new Razorpay(options);
-          rzp.open();
-        };
-        script.onerror = () => {
-          setError("Failed to load payment gateway. Please try again.");
-          setLoading(false);
-        };
-        document.head.appendChild(script);
-      } else {
-        const rzp = new Razorpay(options);
-        rzp.open();
-      }
-    } catch (err) {
-      console.error("Razorpay error:", err);
-      setError(err.response?.data?.message || "Payment initiation failed");
-      setLoading(false);
-    }
-  }, [donationAmount, currency, isAnonymous, donorName, donorEmail, message]);
-
-  // ✅ Handle Stripe payment
-  const handleStripePayment = useCallback(async () => {
-    setLoading(true);
-    setError("");
-
-    try {
-      // Create donation record
-      const donationData = {
-        amount: parseFloat(donationAmount),
-        currency: "USD",
-        paymentMethod: "stripe",
-        donorName: isAnonymous ? "Anonymous" : donorName,
-        donorEmail: isAnonymous ? "anonymous@psgtech.ac.in" : donorEmail,
-        message: message || "",
-        isAnonymous,
-      };
-
-      // Call backend to create donation & get Stripe session
-      const response = await donationAPI.createDonation(donationData);
-
-      const { stripeSessionId } = response.data;
-
-      if (!stripeSessionId) {
-        setError("Failed to create payment session. Please try again.");
-        setLoading(false);
-        return;
-      }
-
-      // Load Stripe and redirect to checkout
-      const stripe = await window.Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-      const { error: redirectError } = await stripe.redirectToCheckout({
-        sessionId: stripeSessionId,
-      });
-
-      if (redirectError) {
-        setError(redirectError.message);
-      }
-    } catch (err) {
-      console.error("Stripe error:", err);
-      setError(err.response?.data?.message || "Payment initiation failed");
-      setLoading(false);
-    }
-  }, [donationAmount, currency, isAnonymous, donorName, donorEmail, message]);
-
-  // ✅ Handle form submission
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-
-      if (!validateForm()) {
-        return;
-      }
-
-      if (currency === "INR" && paymentMethod === "razorpay") {
-        handleRazorpayPayment();
-      } else if (currency === "USD" && paymentMethod === "stripe") {
-        handleStripePayment();
-      } else {
-        setError("Invalid payment method selected");
-      }
-    },
-    [
-      validateForm,
-      currency,
-      paymentMethod,
-      handleRazorpayPayment,
-      handleStripePayment,
-    ]
-  );
-
-  const quickAmounts = [
-    { amount: 1000, label: "₹1,000" },
-    { amount: 5000, label: "₹5,000" },
-    { amount: 10000, label: "₹10,000" },
-    { amount: 50000, label: "₹50,000" },
-  ];
-
-  const quickAmountsUSD = [
-    { amount: 10, label: "$10" },
-    { amount: 25, label: "$25" },
-    { amount: 50, label: "$50" },
-    { amount: 100, label: "$100" },
-  ];
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Outfit:wght@300;400;500;600;700&display=swap');
         
-        .donate-section {
-          background: linear-gradient(165deg, #f8f5ee 0%, #fdfcf9 45%, #f2f4fa 100%);
-          padding: 110px 24px;
+        .donate-hero {
+          background: linear-gradient(165deg, #0a0e1a 0%, #0d1428 100%);
+          padding: 120px 24px;
           font-family: 'Outfit', sans-serif;
           position: relative;
           overflow: hidden;
         }
-
-        .donate-section::before {
+        
+        .donate-hero::before {
           content: '';
           position: absolute;
-          top: -180px;
-          right: -180px;
-          width: 500px;
-          height: 500px;
-          background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 68%);
+          top: -150px;
+          right: -150px;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
           pointer-events: none;
         }
-
+        
         .donate-inner {
-          max-width: 1000px;
+          max-width: 1240px;
           margin: 0 auto;
+          position: relative;
+          z-index: 2;
         }
-
+        
         .donate-header {
           text-align: center;
-          margin-bottom: 60px;
+          margin-bottom: 80px;
         }
-
+        
         .donate-eyebrow {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          font-size: 10px;
-          font-weight: 600;
-          letter-spacing: 0.22em;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.25em;
           text-transform: uppercase;
-          color: #667eea;
+          color: rgba(201, 168, 76, 0.65);
           margin-bottom: 20px;
         }
-
+        
+        .donate-eyebrow::before, .donate-eyebrow::after {
+          content: '';
+          width: 32px;
+          height: 1.5px;
+          background: linear-gradient(90deg, rgba(201, 168, 76, 0.4), rgba(201, 168, 76, 0.1));
+        }
+        
         .donate-h1 {
           font-family: 'Playfair Display', serif;
-          font-size: clamp(36px, 5vw, 56px);
+          font-size: clamp(42px, 6vw, 72px);
           font-weight: 800;
-          color: #0c0e1a;
-          margin-bottom: 16px;
+          color: #f2ede3;
+          line-height: 1.08;
           letter-spacing: -0.025em;
+          margin-bottom: 24px;
         }
-
-        .donate-subtitle {
+        
+        .donate-h1 em {
+          font-style: italic;
+          background: linear-gradient(130deg, #c9a84c, #f0d870);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        
+        .donate-sub {
           font-size: 16px;
-          color: #535e78;
-          max-width: 600px;
+          font-weight: 300;
+          color: rgba(200, 215, 240, 0.5);
+          max-width: 650px;
           margin: 0 auto;
+          line-height: 1.75;
         }
-
-        .donate-form-wrapper {
-          background: white;
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          border-radius: 16px;
-          padding: 48px;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        }
-
-        .form-grid {
+        
+        .donate-main {
           display: grid;
-          grid-template-columns: 2fr 1fr;
-          gap: 40px;
+          grid-template-columns: 1fr 1fr;
+          gap: 60px;
+          margin-bottom: 80px;
         }
-
-        .form-column-left {
-          display: flex;
-          flex-direction: column;
-          gap: 28px;
-        }
-
-        .form-section-title {
+        
+        .donate-form-section h3 {
           font-family: 'Playfair Display', serif;
-          font-size: 20px;
+          font-size: 28px;
           font-weight: 700;
-          color: #0c0e1a;
+          color: #f2ede3;
+          margin-bottom: 32px;
+          line-height: 1.2;
+        }
+        
+        .donation-amount-group {
+          margin-bottom: 32px;
+        }
+        
+        .donation-label {
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(201, 168, 76, 0.8);
+          margin-bottom: 12px;
+          display: block;
+        }
+        
+        .amount-presets {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
           margin-bottom: 16px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
         }
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .form-label {
-          font-size: 13px;
-          font-weight: 600;
-          color: #0c0e1a;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .form-input,
-        .form-select,
-        .form-textarea {
-          padding: 12px 14px;
-          border: 1px solid #e0e6f0;
-          border-radius: 8px;
-          font-family: 'Outfit', sans-serif;
-          font-size: 14px;
-          color: #0c0e1a;
-          transition: border-color 0.2s;
-        }
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-          outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-textarea {
-          resize: vertical;
-          min-height: 80px;
-        }
-
-        .amount-group {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-        }
-
+        
         .amount-btn {
-          flex: 1;
-          min-width: 90px;
-          padding: 12px;
-          background: #f0f3f9;
-          border: 1px solid #e0e6f0;
-          border-radius: 8px;
-          font-size: 13px;
+          padding: 12px 16px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(201, 168, 76, 0.2);
+          border-radius: 6px;
+          color: rgba(200, 215, 240, 0.7);
+          font-size: 12px;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.25s ease;
         }
-
-        .amount-btn:hover,
-        .amount-btn.active {
-          background: #667eea;
-          color: white;
-          border-color: #667eea;
+        
+        .amount-btn:hover, .amount-btn.active {
+          background: rgba(201, 168, 76, 0.2);
+          border-color: rgba(201, 168, 76, 0.5);
+          color: #e8c560;
         }
-
-        .checkbox-group {
+        
+        .amount-custom {
           display: flex;
-          align-items: center;
           gap: 10px;
         }
-
-        .checkbox-group input {
-          width: 18px;
-          height: 18px;
-          cursor: pointer;
+        
+        .amount-custom input {
+          flex: 1;
+          padding: 10px 14px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(201, 168, 76, 0.2);
+          border-radius: 6px;
+          color: #f2ede3;
+          font-size: 12px;
+          transition: all 0.25s ease;
         }
-
-        .error-message {
-          padding: 12px 14px;
-          background: #fee2e2;
-          border: 1px solid #fc8181;
-          border-radius: 8px;
-          color: #742a2a;
-          font-size: 13px;
+        
+        .amount-custom input:focus {
+          outline: none;
+          border-color: rgba(201, 168, 76, 0.5);
+          background: rgba(201, 168, 76, 0.05);
+        }
+        
+        .frequency-toggle {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          gap: 10px;
+          margin-bottom: 32px;
         }
-
-        .success-message {
-          padding: 12px 14px;
-          background: #c6f6d5;
-          border: 1px solid #48bb78;
-          border-radius: 8px;
-          color: #22543d;
-          font-size: 13px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .form-column-right {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-        }
-
-        .payment-summary {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 24px;
-          position: sticky;
-          top: 80px;
-        }
-
-        .summary-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 0;
-          font-size: 14px;
-        }
-
-        .summary-row.total {
-          border-top: 2px solid #e2e8f0;
-          padding-top: 16px;
-          margin-top: 16px;
-          font-weight: 700;
-          color: #0c0e1a;
-          font-size: 16px;
-        }
-
-        .summary-value {
-          text-align: right;
-          color: #667eea;
+        
+        .freq-btn {
+          flex: 1;
+          padding: 10px 16px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(201, 168, 76, 0.2);
+          border-radius: 6px;
+          color: rgba(200, 215, 240, 0.7);
+          font-size: 12px;
           font-weight: 600;
-        }
-
-        .submit-btn {
-          width: 100%;
-          padding: 14px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-family: 'Outfit', sans-serif;
-          font-size: 14px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
           cursor: pointer;
-          transition: all 0.3s;
+          transition: all 0.25s ease;
+        }
+        
+        .freq-btn.active {
+          background: rgba(201, 168, 76, 0.2);
+          border-color: rgba(201, 168, 76, 0.5);
+          color: #e8c560;
+        }
+        
+        .form-group {
+          margin-bottom: 20px;
+        }
+        
+        .form-label {
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: rgba(200, 215, 240, 0.6);
+          margin-bottom: 8px;
+          display: block;
+        }
+        
+        .form-input {
+          width: 100%;
+          padding: 10px 14px;
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(201, 168, 76, 0.2);
+          border-radius: 6px;
+          color: #f2ede3;
+          font-size: 12px;
+          transition: all 0.25s ease;
+        }
+        
+        .form-input:focus {
+          outline: none;
+          border-color: rgba(201, 168, 76, 0.5);
+          background: rgba(201, 168, 76, 0.05);
+        }
+        
+        .donate-btn {
+          width: 100%;
+          padding: 14px 24px;
+          background: linear-gradient(135deg, #b8882a, #e8c255);
+          color: #07080e;
+          font-family: 'Outfit', sans-serif;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          border: none;
+          border-radius: 7px;
+          cursor: pointer;
+          transition: all 0.3s ease;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          min-height: 48px;
+          gap: 10px;
         }
-
-        .submit-btn:hover:not(:disabled) {
+        
+        .donate-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+          box-shadow: 0 8px 28px rgba(201, 168, 76, 0.35);
         }
-
-        .submit-btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
+        
+        .info-section {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
         }
-
-        .impact-section {
-          margin-top: 40px;
-          padding: 28px;
-          background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
-          border-radius: 12px;
-          border-left: 4px solid #667eea;
+        
+        .info-card {
+          padding: 28px 32px;
+          background: rgba(255, 255, 255, 0.01);
+          border: 1px solid rgba(201, 168, 76, 0.15);
+          border-radius: 10px;
+          transition: all 0.35s ease;
         }
-
-        .impact-title {
-          font-weight: 600;
-          color: #0c0e1a;
+        
+        .info-card:hover {
+          border-color: rgba(201, 168, 76, 0.35);
+          background: rgba(201, 168, 76, 0.05);
+        }
+        
+        .info-card h4 {
+          font-family: 'Playfair Display', serif;
+          font-size: 20px;
+          font-weight: 700;
+          color: #f2ede3;
           margin-bottom: 12px;
+          line-height: 1.2;
         }
-
-        .impact-text {
+        
+        .info-card p {
           font-size: 13px;
-          color: #535e78;
-          line-height: 1.6;
+          color: rgba(200, 215, 240, 0.6);
+          line-height: 1.7;
         }
-
-        @media (max-width: 768px) {
-          .form-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .donate-form-wrapper {
-            padding: 28px;
-          }
-
-          .payment-summary {
-            position: static;
-          }
+        
+        .impact-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        
+        .impact-item {
+          padding: 14px;
+          background: rgba(201, 168, 76, 0.05);
+          border: 1px solid rgba(201, 168, 76, 0.15);
+          border-radius: 6px;
+          text-align: center;
+          font-size: 11px;
+          color: rgba(200, 215, 240, 0.65);
+          line-height: 1.5;
+        }
+        
+        .impact-amount {
+          font-weight: 700;
+          color: #c9a84c;
+          display: block;
+          margin-bottom: 4px;
+        }
+        
+        .donation-ways {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-top: 40px;
+        }
+        
+        .way-card {
+          padding: 20px;
+          background: rgba(201, 168, 76, 0.04);
+          border: 1px solid rgba(201, 168, 76, 0.15);
+          border-radius: 8px;
+        }
+        
+        .way-icon {
+          font-size: 28px;
+          margin-bottom: 8px;
+          display: block;
+        }
+        
+        .way-card h5 {
+          font-size: 13px;
+          font-weight: 600;
+          color: #f2ede3;
+          margin-bottom: 4px;
+        }
+        
+        .way-card p {
+          font-size: 11px;
+          color: rgba(200, 215, 240, 0.55);
+          line-height: 1.5;
+        }
+        
+        @media (max-width: 820px) {
+          .donate-main { grid-template-columns: 1fr; gap: 40px; }
+          .amount-presets { grid-template-columns: repeat(2, 1fr); }
+          .donation-ways { grid-template-columns: 1fr; }
+          .impact-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
-      <section className="donate-section">
+      <section className="donate-hero">
         <div className="donate-inner">
-          {/* Header */}
-          <motion.div
+          <motion.div 
             className="donate-header"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <motion.div variants={itemVariants}>
-              <span className="donate-eyebrow">
-                <Heart size={14} />
-                Make Your Impact
-              </span>
-            </motion.div>
-
-            <motion.h1 className="donate-h1" variants={itemVariants}>
-              Support PSG Tech Excellence
-            </motion.h1>
-
-            <motion.p className="donate-subtitle" variants={itemVariants}>
-              Your donation directly supports student scholarships, research initiatives, and campus development. Every contribution makes a difference.
-            </motion.p>
+            <div className="donate-eyebrow">Make a Difference</div>
+            <h1 className="donate-h1">Support Education & <em>Innovation</em></h1>
+            <p className="donate-sub">
+              Your donation directly supports scholarships, research initiatives, infrastructure development, and capacity-building programs at PSG College of Technology & Polytechnic College.
+            </p>
           </motion.div>
 
-          {/* Form */}
-          <motion.div
-            className="donate-form-wrapper"
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+          <motion.div 
+            className="donate-main"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, delay: 0.2 }}
           >
-            <form onSubmit={handleSubmit} className="form-grid">
-              {/* Left Column */}
-              <div className="form-column-left">
-                {/* Error Message */}
-                {error && (
-                  <div className="error-message">
-                    <AlertCircle size={16} />
-                    {error}
-                  </div>
-                )}
-
-                {/* Success Message */}
-                {success && (
-                  <div className="success-message">
-                    <CheckCircle size={16} />
-                    Donation processed successfully! Thank you for your support.
-                  </div>
-                )}
-
-                {/* Currency Selection */}
-                <div className="form-group">
-                  <label className="form-label">Currency</label>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCurrency("INR");
-                        setPaymentMethod("razorpay");
-                      }}
-                      className={`amount-btn ${currency === "INR" ? "active" : ""}`}
-                    >
-                      ₹ INR
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCurrency("USD");
-                        setPaymentMethod("stripe");
-                      }}
-                      className={`amount-btn ${currency === "USD" ? "active" : ""}`}
-                    >
-                      $ USD
-                    </button>
-                  </div>
-                </div>
-
-                {/* Donation Amount */}
-                <div className="form-group">
-                  <label className="form-label">
-                    Donation Amount
-                    {currency === "INR" ? " (₹)" : " ($)"}
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={donationAmount}
-                    onChange={(e) => setDonationAmount(e.target.value)}
-                    placeholder="Enter amount"
-                    className="form-input"
-                    required
-                  />
-
-                  {/* Quick Amount Buttons */}
-                  <div className="amount-group">
-                    {(currency === "INR" ? quickAmounts : quickAmountsUSD).map(
-                      (item) => (
-                        <button
-                          key={item.amount}
-                          type="button"
-                          onClick={() => setDonationAmount(item.amount.toString())}
-                          className={`amount-btn ${
-                            parseFloat(donationAmount) === item.amount ? "active" : ""
-                          }`}
-                        >
-                          {item.label}
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
-
-                {/* Donor Info */}
-                <div>
-                  <h3 className="form-section-title">
-                    <Heart size={18} /> Donor Information
-                  </h3>
-
-                  {/* Anonymous Checkbox */}
-                  <div className="form-group">
-                    <div className="checkbox-group">
-                      <input
-                        type="checkbox"
-                        id="anonymous"
-                        checked={isAnonymous}
-                        onChange={(e) => setIsAnonymous(e.target.checked)}
-                      />
-                      <label htmlFor="anonymous" className="form-label">
-                        Donate anonymously
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Name & Email */}
-                  {!isAnonymous && (
-                    <>
-                      <div className="form-group">
-                        <label className="form-label">Full Name *</label>
-                        <input
-                          type="text"
-                          value={donorName}
-                          onChange={(e) => setDonorName(e.target.value)}
-                          placeholder="Your full name"
-                          className="form-input"
-                          required={!isAnonymous}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="form-label">Email Address *</label>
-                        <input
-                          type="email"
-                          value={donorEmail}
-                          onChange={(e) => setDonorEmail(e.target.value)}
-                          placeholder="your@email.com"
-                          className="form-input"
-                          required={!isAnonymous}
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Message */}
-                  <div className="form-group">
-                    <label className="form-label">Message (Optional)</label>
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Share why you're supporting PSG Tech..."
-                      className="form-textarea"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column - Summary */}
-              <div className="form-column-right">
-                <div className="payment-summary">
-                  <h3 style={{ fontSize: "14px", fontWeight: "700", marginBottom: "16px" }}>
-                    Payment Summary
-                  </h3>
-
-                  <div className="summary-row">
-                    <span>Donation Amount</span>
-                    <span className="summary-value">
-                      {currency === "INR" ? "₹" : "$"}
-                      {donationAmount || "0"}
-                    </span>
-                  </div>
-
-                  <div className="summary-row">
-                    <span>Processing Fee</span>
-                    <span className="summary-value">
-                      {currency === "INR" ? "₹" : "$"}
-                      {donationAmount ? (parseFloat(donationAmount) * 0.02).toFixed(2) : "0"}
-                    </span>
-                  </div>
-
-                  <div className="summary-row total">
-                    <span>Total Amount</span>
-                    <span>
-                      {currency === "INR" ? "₹" : "$"}
-                      {donationAmount
-                        ? (parseFloat(donationAmount) * 1.02).toFixed(2)
-                        : "0"}
-                    </span>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading || !donationAmount}
-                    className="submit-btn"
+            {/* Donation Form */}
+            <div className="donate-form-section">
+              <h3>Make Your Donation</h3>
+              
+              <div className="donation-amount-group">
+                <label className="donation-label">Select Amount</label>
+                <div className="amount-presets">
+                  <button 
+                    className={`amount-btn ${donationAmount === 5000 ? 'active' : ''}`}
+                    onClick={() => setDonationAmount(5000)}
                   >
-                    {loading ? (
-                      <>
-                        <div
-                          style={{
-                            width: "16px",
-                            height: "16px",
-                            border: "2px solid white",
-                            borderTop: "2px solid transparent",
-                            borderRadius: "50%",
-                            animation: "spin 0.8s linear infinite",
-                          }}
-                        />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Heart size={18} />
-                        Donate Now
-                      </>
-                    )}
+                    ₹5,000
                   </button>
-
-                  <p
-                    style={{
-                      fontSize: "11px",
-                      color: "#a0aec0",
-                      textAlign: "center",
-                      marginTop: "12px",
-                    }}
+                  <button 
+                    className={`amount-btn ${donationAmount === 10000 ? 'active' : ''}`}
+                    onClick={() => setDonationAmount(10000)}
                   >
-                    Secure payment powered by{" "}
-                    {currency === "INR" ? "Razorpay" : "Stripe"}
-                  </p>
+                    ₹10,000
+                  </button>
+                  <button 
+                    className={`amount-btn ${donationAmount === 25000 ? 'active' : ''}`}
+                    onClick={() => setDonationAmount(25000)}
+                  >
+                    ₹25,000
+                  </button>
+                  <button 
+                    className={`amount-btn ${donationAmount === 50000 ? 'active' : ''}`}
+                    onClick={() => setDonationAmount(50000)}
+                  >
+                    ₹50,000
+                  </button>
                 </div>
-
-                {/* Impact Section */}
-                <div className="impact-section">
-                  <div className="impact-title">💡 Your Impact</div>
-                  <div className="impact-text">
-                    {currency === "INR" && donationAmount ? (
-                      <>
-                        ₹{donationAmount} can provide a scholarship to one deserving
-                        student for a semester or support one research project.
-                      </>
-                    ) : currency === "USD" && donationAmount ? (
-                      <>
-                        ${donationAmount} can contribute to campus facilities and
-                        educational resources.
-                      </>
-                    ) : (
-                      <>
-                        Your donation will directly support PSG Tech's mission of
-                        excellence in education and student support.
-                      </>
-                    )}
-                  </div>
+                <div className="amount-custom">
+                  <span style={{display: 'flex', alignItems: 'center', color: 'rgba(200, 215, 240, 0.6)', fontSize: '12px'}}>₹</span>
+                  <input 
+                    type="number"
+                    value={donationAmount}
+                    onChange={(e) => setDonationAmount(parseInt(e.target.value) || 0)}
+                    placeholder="Custom amount"
+                  />
                 </div>
               </div>
-            </form>
+
+              <div className="frequency-toggle">
+                <button 
+                  className={`freq-btn ${!isMonthly ? 'active' : ''}`}
+                  onClick={() => setIsMonthly(false)}
+                >
+                  One-Time
+                </button>
+                <button 
+                  className={`freq-btn ${isMonthly ? 'active' : ''}`}
+                  onClick={() => setIsMonthly(true)}
+                >
+                  Monthly
+                </button>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Full Name</label>
+                <input 
+                  type="text"
+                  className="form-input"
+                  placeholder="Your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Email Address</label>
+                <input 
+                  type="email"
+                  className="form-input"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Message (Optional)</label>
+                <textarea 
+                  className="form-input"
+                  placeholder="Share why you're supporting us..."
+                  rows="3"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  style={{ resize: 'none' }}
+                />
+              </div>
+
+              <button className="donate-btn">
+                <Heart size={16} />
+                Proceed to Payment
+              </button>
+            </div>
+
+            {/* Information Section */}
+            <div className="info-section">
+              <div className="info-card">
+                <h4>🎯 Your Impact</h4>
+                <p>
+                  Every contribution, regardless of size, directly creates opportunities for deserving students and strengthens the future of education and innovation at PSG institutions.
+                </p>
+                <div className="impact-grid">
+                  {DonationImpact.map((item, i) => (
+                    <div key={i} className="impact-item">
+                      <span className="impact-amount">{item.amount}</span>
+                      {item.impact}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="info-card">
+                <h4>📋 Tax Benefits</h4>
+                <p>
+                  Donations to PSG Tech Alumni Foundation are eligible for tax deduction under Section 80G of the Indian Income Tax Act. Get your tax-exemption certificate upon donation.
+                </p>
+              </div>
+
+              <div className="info-card">
+                <h4>🔒 Security & Transparency</h4>
+                <p>
+                  We maintain the highest standards of financial transparency and accountability. All funds are used strictly as per our mission and statutory guidelines.
+                </p>
+              </div>
+
+              <div className="info-card">
+                <h4>💳 Payment Methods</h4>
+                <div className="donation-ways">
+                  {DonationWays.map((way, i) => (
+                    <div key={i} className="way-card">
+                      <span className="way-icon">{way.icon}</span>
+                      <h5>{way.title}</h5>
+                      <p>{way.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
-
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </>
   );
 };

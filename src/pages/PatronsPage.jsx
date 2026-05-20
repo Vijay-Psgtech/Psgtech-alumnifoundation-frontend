@@ -31,7 +31,7 @@ const PatronsPage = () => {
   };
 
   return (
-    <section className="px-6 py-16 md:py-28 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+    <section className="px-6 py-16 md:py-28 bg-linear-to-b from-slate-50 to-white relative overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100/30 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-100/30 rounded-full blur-3xl -z-10" />
@@ -55,7 +55,7 @@ const PatronsPage = () => {
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 mb-6"
           >
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-orange-600">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-purple-600 to-orange-600">
               Visionary Patrons
             </span>
           </motion.h1>
@@ -87,7 +87,7 @@ const PatronsPage = () => {
                 {/* Image Container */}
                 <motion.div
                   variants={imageVariants}
-                  className="relative h-80 overflow-hidden bg-gradient-to-br from-slate-200 to-slate-300"
+                  className="relative h-80 overflow-hidden bg-linear-to-br from-slate-200 to-slate-300"
                 >
                   <img
                     src={patron.image}
@@ -95,7 +95,7 @@ const PatronsPage = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </motion.div>
 
                 {/* Content */}
@@ -122,7 +122,7 @@ const PatronsPage = () => {
 
                   {/* Bottom accent */}
                   <div className="mt-6 pt-6 border-t border-slate-100">
-                    <div className="w-8 h-1 rounded-full bg-gradient-to-r from-purple-600 to-orange-600" />
+                    <div className="w-8 h-1 rounded-full bg-linear-to-r from-purple-600 to-orange-600" />
                   </div>
                 </div>
               </div>
@@ -136,7 +136,7 @@ const PatronsPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="mt-20 p-8 md:p-12 rounded-2xl bg-gradient-to-r from-purple-50 via-orange-50 to-purple-50 border-2 border-purple-200 text-center"
+          className="mt-20 p-8 md:p-12 rounded-2xl bg-linear-to-r from-purple-50 via-orange-50 to-purple-50 border-2 border-purple-200 text-center"
         >
           <h3 className="text-2xl font-bold text-slate-900 mb-4">
             Guiding PSG Tech's Future

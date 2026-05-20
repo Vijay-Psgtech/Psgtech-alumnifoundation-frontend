@@ -70,7 +70,7 @@ export function DataProvider({ children }) {
       };
       setEvents((prev) => [...prev, newEvent]);
       return newEvent;
-    }
+    }   
   }, []);
 
   const updateEvent = useCallback(async (id, data) => {

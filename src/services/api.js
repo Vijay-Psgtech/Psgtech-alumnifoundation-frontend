@@ -11,11 +11,26 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+const normalizeLoginPayload = (emailOrData, password) => {
+  if (emailOrData && typeof emailOrData === "object") {
+    return {
+      email: String(emailOrData.email || "").trim().toLowerCase(),
+      password: String(emailOrData.password || ""),
+    };
+  }
+
+  return {
+    email: String(emailOrData || "").trim().toLowerCase(),
+    password: String(password || ""),
+  };
+};
+
 // ── AUTH API ────────────────────────────────────────────────────────────────
 // ✅ For AlumniRegistration, Login, Password Reset, Profile, etc.
 export const authAPI = {
   register: (data) => api.post("/auth/register", data),
-  login: (email, password) => api.post("/auth/login", { email, password }),
+  login: (emailOrData, password) =>
+    api.post("/auth/login", normalizeLoginPayload(emailOrData, password)),
   logout: () => api.post("/auth/logout"),
   forgotPassword: (email) => api.post("/auth/forgot-password", { email }),
   verifyOTP: (email, otp) => api.post("/auth/verify-otp", { email, otp }),

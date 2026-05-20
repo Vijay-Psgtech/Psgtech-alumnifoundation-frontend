@@ -1,15 +1,16 @@
-// src/components/NavBar.jsx — PSG Tech Alumni Foundation
-// ✅ FIXED: Now uses AuthContext instead of raw localStorage reads
-//   - Login state updates instantly without page refresh
-//   - Logout clears context state properly
-//   - All other styling unchanged
-
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Menu, X, ChevronDown, LogOut, User, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  LogOut,
+  User,
+  LayoutDashboard,
+} from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Logo from "../assets/Images/staffImages/psg_logo.jpg";
+import Logo from "../assets/Images/staffImages/logo.jpg";
 
 export default function NavBar() {
   const { user, logout } = useAuth();
@@ -29,24 +30,27 @@ export default function NavBar() {
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
 
-  // ✅ FIXED: All items are proper objects — no raw JSX in array
   const navItems = [
     { label: "Home", path: "/" },
     {
       label: "About",
       submenu: [
         { label: "Overview", path: "/about" },
+        { label: "Objectives", path: "/objectives" },
         { label: "Patrons", path: "/patrons" },
         { label: "Office Bearers", path: "/officebearers" },
+        { label: "Council Members", path: "/council" },
+        { label: "Engagement", path: "/engagement" },
+        { label: "Initiatives", path: "/initiatives" },
       ],
     },
-    { label: "Objectives", path: "/objectives" },
+    { label: "Gallery", path: "/gallery" },
     {
       label: "Events",
       submenu: [
         { label: "All Events", path: "/events" },
         { label: "Calendar", path: "/events/calendar" },
-        { label: "Year Albums", path: "/events/albums" },
+        { label: "Photo Albums", path: "/events/albums" },
       ],
     },
     { label: "Contact", path: "/contact" },
@@ -57,12 +61,13 @@ export default function NavBar() {
         user ? { label: "Alumni Map", path: "/alumni/map" } : null,
         user ? { label: "My Profile", path: "/alumni/profile" } : null,
         user ? { label: "My Donations", path: "/alumni/donations" } : null,
-        user?.isAdmin ? { label: "Admin Dashboard", path: "/alumni/dashboard" } : null,
+        user?.isAdmin
+          ? { label: "Admin Dashboard", path: "/alumni/dashboard" }
+          : null,
       ].filter(Boolean),
     },
   ];
 
-  // Helper to check which dropdown is open
   const isDropdownOpen = (label) => {
     if (label === "About") return aboutOpen;
     if (label === "Events") return eventsOpen;
@@ -169,19 +174,18 @@ export default function NavBar() {
         }
 
         .nav-inner {
-          max-width: 1340px; margin: 0 auto;
+          max-width: 1400px; margin: 0 auto;
           padding: 0 32px;
           height: 72px;
           display: flex; align-items: center; justify-content: space-between;
         }
 
-        /* LOGO */
         .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; }
         .nav-logo-img-wrap {
-          width: 46px; height: 46px; border-radius: 10px;
+          width: 66px; height: 66px; border-radius: 10px;
           border: 1px solid rgba(201,168,76,0.28);
           background: rgba(201,168,76,0.07);
-          padding: 3px; flex-shrink: 0;
+          padding: 5px; flex-shrink: 0;
           transition: border-color 0.3s, box-shadow 0.3s;
         }
         .nav-logo:hover .nav-logo-img-wrap {
@@ -194,7 +198,9 @@ export default function NavBar() {
           font-family: 'Playfair Display', serif;
           font-weight: 700; font-size: 16.5px;
           background: linear-gradient(130deg, #c9a84c 0%, #f0d080 55%, #c4a045 100%);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           letter-spacing: 0.01em;
         }
         .nav-logo-sub {
@@ -202,8 +208,7 @@ export default function NavBar() {
           text-transform: uppercase; color: rgba(200,210,235,0.42);
         }
 
-        /* DESKTOP LINKS */
-        .nav-links { display: flex; align-items: center; gap: 34px; }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
         .nav-link {
           position: relative; font-size: 13px; font-weight: 500;
           letter-spacing: 0.08em; text-transform: uppercase;
@@ -219,190 +224,208 @@ export default function NavBar() {
           background: linear-gradient(90deg, var(--gold), var(--gold-light));
           transition: width 0.32s cubic-bezier(0.4,0,0.2,1);
         }
-        .nav-link:hover, .nav-link.active { color: var(--gold-light); }
-        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover { color: var(--gold); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link.active { color: var(--gold); }
+        .nav-link.active::after { width: 100%; }
 
-        /* DROPDOWN */
         .dropdown-wrap { position: relative; }
         .dropdown-panel {
-          position: absolute; top: calc(100% + 18px); left: 50%;
-          transform: translateX(-50%) scaleY(0.88) translateY(-10px);
-          transform-origin: top center;
-          width: 210px; background: rgba(7,10,22,0.97);
-          border: 1px solid rgba(201,168,76,0.18);
-          border-radius: 10px; overflow: hidden;
-          box-shadow: 0 24px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(201,168,76,0.06) inset;
-          opacity: 0; pointer-events: none;
-          transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.4,0,0.2,1);
-          backdrop-filter: blur(18px);
+          position: absolute; top: 100%; left: -12px;
+          background: rgba(8,11,22,0.98); backdrop-filter: blur(18px);
+          border: 1px solid rgba(201,168,76,0.25);
+          border-radius: 10px;
+          padding: 8px 0;
+          min-width: 220px;
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-8px);
+          transition: opacity 0.3s, transform 0.3s;
+          z-index: 1000;
+          margin-top: 8px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
+        .dropdown-wrap:hover .dropdown-panel,
         .dropdown-panel.open {
-          opacity: 1; pointer-events: auto;
-          transform: translateX(-50%) scaleY(1) translateY(0);
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0);
         }
-        .dropdown-gold-bar { height: 2px; background: linear-gradient(90deg, #b8882a, #e8c560, #b8882a); }
+        .dropdown-gold-bar { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
         .dropdown-item {
-          display: block; padding: 11px 18px;
-          font-size: 12px; font-weight: 500;
-          letter-spacing: 0.07em; text-transform: uppercase;
-          color: rgba(210,220,240,0.7);
-          text-decoration: none;
-          transition: color 0.2s, background 0.2s, border-color 0.2s;
-          border-left: 2px solid transparent;
+          display: block; width: 100%;
+          padding: 10px 16px;
+          font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+          color: var(--text-muted);
+          text-decoration: none; transition: all 0.25s;
+          border: none; cursor: pointer; text-align: left; background: none;
         }
-        .dropdown-item:hover, .dropdown-item.active-dd {
-          color: var(--gold-light); background: rgba(201,168,76,0.07);
-          border-left-color: rgba(201,168,76,0.6);
+        .dropdown-item:hover { background: rgba(201,168,76,0.1); color: var(--gold); }
+        .dropdown-item.active-dd { color: var(--gold); background: rgba(201,168,76,0.05); }
+
+        .nav-actions { display: flex; align-items: center; gap: 18px; }
+        .user-btn {
+          display: flex; align-items: center; gap: 8px;
+          padding: 5px 12px 5px 5px;
+          background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.24);
+          border-radius: 8px;
+          cursor: pointer; transition: all 0.25s;
+        }
+        .user-btn:hover { background: rgba(201,168,76,0.13); border-color: rgba(201,168,76,0.35); }
+        .user-avatar {
+          width: 34px; height: 34px; border-radius: 6px;
+          background: linear-gradient(135deg, var(--gold), #e8c96a);
+          color: #07080e; font-weight: 700; font-size: 14px;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .user-name { font-size: 12px; font-weight: 500; color: rgba(215,225,245,0.9); }
+        .chevron-icon { transition: transform 0.3s; }
+        .chevron-open { transform: scaleY(-1); }
+
+        .user-dropdown {
+          position: absolute; top: 100%; right: 0;
+          background: rgba(8,11,22,0.98); backdrop-filter: blur(18px);
+          border: 1px solid rgba(201,168,76,0.25);
+          border-radius: 10px;
+          padding: 8px 0;
+          min-width: 200px;
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(-8px);
+          transition: opacity 0.3s, transform 0.3s;
+          z-index: 1000;
+          margin-top: 8px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .user-dropdown.open {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(0);
         }
 
-        /* RIGHT ACTIONS */
-        .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .btn-ghost-nav {
-          padding: 8px 20px; border: 1px solid rgba(201,168,76,0.28);
-          border-radius: 7px; background: transparent;
-          font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 500;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          color: rgba(210,220,240,0.8); cursor: pointer;
-          transition: all 0.28s ease; text-decoration: none; display: inline-block;
+        .ud-item {
+          display: flex; align-items: center; gap: 8px;
+          padding: 10px 16px;
+          font-size: 12px; text-decoration: none; color: var(--text-muted);
+          cursor: pointer; transition: all 0.25s;
+          border: none; background: none; text-align: left; width: 100%;
         }
-        .btn-ghost-nav:hover { border-color: rgba(201,168,76,0.65); color: var(--gold-light); background: rgba(201,168,76,0.06); }
+        .ud-item:hover { background: rgba(201,168,76,0.1); color: var(--gold); }
+        .ud-item.danger:hover { background: rgba(220,53,69,0.15); color: #ff6b6b; }
+        .ud-divider { height: 1px; background: rgba(201,168,76,0.1); margin: 4px 0; }
 
         .btn-gold-nav {
-          padding: 9px 22px; border: none; border-radius: 7px;
-          background: linear-gradient(135deg, #b8882a 0%, #e0bc55 50%, #b8882a 100%);
-          background-size: 200% 100%; background-position: right center;
-          font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
-          letter-spacing: 0.09em; text-transform: uppercase;
-          color: #08090f; cursor: pointer;
-          transition: background-position 0.4s ease, box-shadow 0.3s, transform 0.2s;
-          text-decoration: none; display: inline-block;
+          padding: 9px 20px; background: linear-gradient(135deg, #b8882a, #e8c255);
+          color: #07080e; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+          border-radius: 6px; text-decoration: none; transition: all 0.25s;
+          border: none; cursor: pointer;
         }
-        .btn-gold-nav:hover {
-          background-position: left center;
-          box-shadow: 0 0 22px rgba(201,168,76,0.42);
-          transform: translateY(-1px);
-        }
+        .btn-gold-nav:hover { box-shadow: 0 6px 20px rgba(201,168,76,0.35); transform: translateY(-2px); }
 
-        /* USER AVATAR */
-        .user-btn {
-          display: flex; align-items: center; gap: 9px;
-          background: none; border: none; cursor: pointer; padding: 0;
+        .btn-ghost-nav {
+          padding: 9px 16px; border: 1px solid rgba(201,168,76,0.32);
+          background: transparent; color: var(--gold);
+          font-size: 12px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase;
+          border-radius: 6px; text-decoration: none; transition: all 0.25s; cursor: pointer;
         }
-        .user-avatar {
-          width: 34px; height: 34px; border-radius: 50%;
-          background: linear-gradient(135deg, #b8882a, #e0bc55);
-          display: flex; align-items: center; justify-content: center;
-          font-weight: 700; font-size: 13px; color: #08090f;
-          transition: box-shadow 0.3s; flex-shrink: 0;
-        }
-        .user-btn:hover .user-avatar { box-shadow: 0 0 16px rgba(201,168,76,0.5); }
-        .user-name { font-size: 13px; font-weight: 500; color: rgba(220,228,245,0.9); line-height: 1.2; text-align: left; }
-        .chevron-icon { color: rgba(200,210,235,0.45); transition: transform 0.3s; }
-        .chevron-open { transform: rotate(180deg); }
+        .btn-ghost-nav:hover { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.5); }
 
-        /* USER DROPDOWN */
-        .user-dropdown {
-          position: absolute; top: calc(100% + 14px); right: 0;
-          width: 225px; background: rgba(7,10,22,0.98);
-          border: 1px solid rgba(201,168,76,0.2); border-radius: 11px;
-          overflow: hidden; box-shadow: 0 20px 55px rgba(0,0,0,0.7);
-          backdrop-filter: blur(20px);
-          animation: dropFadeIn 0.2s cubic-bezier(0.4,0,0.2,1);
-        }
-        @keyframes dropFadeIn {
-          from { opacity: 0; transform: translateY(-6px) scale(0.97); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .user-dropdown-header {
-          padding: 14px 18px 12px;
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-        .ud-signed-in { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(200,210,235,0.32); margin-bottom: 3px; }
-        .ud-name { font-size: 14px; font-weight: 600; color: #e8d8a8; }
-        .ud-item {
-          display: flex; align-items: center; gap: 10px;
-          padding: 11px 18px; font-size: 12px; font-weight: 500;
-          letter-spacing: 0.07em; text-transform: uppercase;
-          color: rgba(210,220,240,0.65); text-decoration: none;
-          border-left: 2px solid transparent;
-          transition: color 0.2s, background 0.2s, border-color 0.2s;
-          background: none; border-right: none; border-top: none; border-bottom: none;
-          width: 100%; cursor: pointer;
-          font-family: 'Outfit', sans-serif;
-        }
-        .ud-item:hover { color: var(--gold-light); background: rgba(201,168,76,0.07); border-left-color: rgba(201,168,76,0.55); }
-        .ud-item.danger { color: rgba(240,90,90,0.75); }
-        .ud-item.danger:hover { color: rgba(255,110,110,0.95); background: rgba(220,50,50,0.07); border-left-color: rgba(220,60,60,0.5); }
-        .ud-divider { height: 1px; background: linear-gradient(90deg,transparent,rgba(201,168,76,0.18),transparent); margin: 4px 0; }
-
-        /* HAMBURGER */
         .ham-btn {
-          background: none; border: 1px solid rgba(201,168,76,0.22);
-          border-radius: 8px; padding: 8px; color: var(--gold);
-          cursor: pointer; display: none; transition: all 0.25s;
+          display: none; background: none; border: none; color: var(--gold);
+          cursor: pointer; transition: color 0.25s;
         }
-        .ham-btn:hover { border-color: rgba(201,168,76,0.55); background: rgba(201,168,76,0.06); }
+        .ham-btn:hover { color: var(--gold-light); }
 
-        /* MOBILE PANEL */
         .mobile-panel {
-          background: rgba(5,8,18,0.98);
-          border-top: 1px solid rgba(201,168,76,0.12);
-          backdrop-filter: blur(24px);
-          padding: 8px 24px 28px;
-          animation: mobileIn 0.25s ease;
+          position: absolute; top: 72px; left: 0; right: 0; width: 100%;
+          background: rgba(8,11,22,0.97); backdrop-filter: blur(18px);
+          border-bottom: 1px solid rgba(201,168,76,0.2);
+          padding: 16px 24px; display: flex; flex-direction: column; gap: 8px;
+          animation: slideDown 0.3s ease forwards;
+          max-height: calc(100vh - 72px);
+          overflow-y: auto;
+          z-index: 998;
         }
-        @keyframes mobileIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+
         .m-link {
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 13px 0; font-size: 15px; font-weight: 500;
-          color: rgba(210,220,240,0.75);
-          border-bottom: 1px solid rgba(255,255,255,0.04);
-          text-decoration: none; background: none; border-left: none; border-right: none; border-top: none;
-          width: 100%; cursor: pointer; font-family: 'Outfit', sans-serif;
-          transition: color 0.2s;
+          padding: 12px 0; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+          color: var(--text-muted); text-decoration: none; background: none; border: none; cursor: pointer;
+          text-align: left; width: 100%; display: flex; align-items: center; justify-content: space-between;
+          transition: color 0.25s;
         }
-        .m-link:hover, .m-link.m-active { color: var(--gold-light); }
+        .m-link:hover, .m-link.m-active { color: var(--gold); }
         .m-sub {
           overflow: hidden; transition: max-height 0.35s ease;
-          padding-left: 16px; border-left: 1px solid rgba(201,168,76,0.18); margin-left: 6px;
+          padding-left: 16px; border-left: 2px solid rgba(201,168,76,0.2);
+          margin-top: 4px;
         }
-        .m-sub-link { display: block; padding: 10px 0; font-size: 13.5px; font-weight: 400; color: rgba(200,210,235,0.6); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
-        .m-sub-link:hover { color: var(--gold-light); }
-        .m-user-card { margin: 18px 0 12px; padding: 14px 16px; border-radius: 10px; background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.14); }
-        .m-user-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(200,210,235,0.35); margin-bottom: 3px; }
-        .m-user-name { font-size: 14px; font-weight: 600; color: #e8d8a8; }
-        .m-btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; border-top: 1px solid rgba(201,168,76,0.12); padding-top: 18px; }
-        .m-btn-gold { padding: 13px; border-radius: 9px; background: linear-gradient(135deg,#b8882a,#e0bc55); color: #08090f; font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border:none; cursor:pointer; text-align:center; text-decoration:none; display:block; }
-        .m-btn-ghost { padding: 12px; border-radius: 9px; background: transparent; color: rgba(200,215,240,0.7); font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; letter-spacing:.07em; text-transform:uppercase; border:1px solid rgba(200,215,240,0.12); cursor:pointer; text-align:center; text-decoration:none; display:block; transition:all .25s; }
-        .m-btn-ghost:hover { border-color:rgba(201,168,76,.35); color:var(--gold-light); }
-        .m-btn-danger { padding:12px; border-radius:9px; background:rgba(200,40,40,.08); color:rgba(240,90,90,.8); border:1px solid rgba(200,40,40,.2); font-family:'Outfit',sans-serif; font-size:13px; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .25s; width: 100%; }
-        .m-btn-danger:hover { background:rgba(200,40,40,.14); color:rgba(255,110,110,.95); }
+        .m-sub-link {
+          display: block; padding: 8px 0; font-size: 12px; color: var(--text-muted);
+          text-decoration: none; transition: color 0.25s;
+        }
+        .m-sub-link:hover { color: var(--gold); }
 
-        @media(max-width:900px) {
-          .nav-links, .nav-actions { display: none; }
-          .ham-btn { display: flex; }
+        .m-user-card { padding: 12px 0; margin: 8px 0; border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+        .m-user-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,215,240,0.42); margin-bottom: 4px; }
+        .m-user-name { font-size: 14px; font-weight: 600; color: var(--gold); }
+
+        .m-btn-row { display: flex; gap: 10px; margin-top: 16px; }
+        .m-btn-gold {
+          flex: 1; padding: 10px 16px; background: linear-gradient(135deg, #b8882a, #e8c255);
+          color: #07080e; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+          border-radius: 6px; text-decoration: none; border: none; cursor: pointer; transition: all 0.25s;
         }
-        @media(min-width:901px) {
-          .mobile-panel { display: none !important; }
+        .m-btn-gold:hover { box-shadow: 0 6px 20px rgba(201,168,76,0.35); }
+        .m-btn-ghost {
+          flex: 1; padding: 10px 16px; border: 1px solid rgba(201,168,76,0.32);
+          background: transparent; color: var(--gold);
+          font-size: 12px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase;
+          border-radius: 6px; text-decoration: none; cursor: pointer; transition: all 0.25s; text-align: center; display: flex; align-items: center; justify-content: center;
+        }
+        .m-btn-ghost:hover { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.5); }
+        .m-btn-danger {
+          flex: 1; padding: 10px 16px; background: rgba(220,53,69,0.15);
+          color: #ff6b6b; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+          border-radius: 6px; border: 1px solid rgba(220,53,69,0.3); cursor: pointer; transition: all 0.25s;
+          display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .m-btn-danger:hover { background: rgba(220,53,69,0.25); border-color: rgba(220,53,69,0.5); }
+
+        @media (max-width: 1200px) {
+          .nav-links { gap: 24px; }
+        }
+        @media (max-width: 1024px) {
+          .nav-links { gap: 18px; }
+          .nav-link { font-size: 12px; }
+        }
+        @media (max-width: 768px) {
+          .nav-inner { padding: 0 16px; height: 64px; }
+          .nav-links { display: none; }
+          .nav-actions { display: none; }
+          .ham-btn { display: flex; }
+          .nav-logo-main { font-size: 14px; }
+          .nav-logo-img-wrap { width: 40px; height: 40px; padding: 3px; }
+          .nav-logo { gap: 10px; }
         }
       `}</style>
 
-      <nav className={`psg-nav ${!navVisible ? "hidden-nav" : ""} ${scrolled ? "scrolled" : "top"}`}>
+      <nav
+        className={`psg-nav ${navVisible ? "visible" : "hidden-nav"} ${scrolled ? "scrolled" : "top"}`}
+        ref={navRef}
+      >
         <div className="nav-gold-line" />
-        <div className="nav-inner" ref={navRef}>
-
-          {/* LOGO */}
-          <Link to="/" className="nav-logo">
+        <div className="nav-inner">
+          <Link to="/" className="nav-logo" onClick={closeAll}>
             <div className="nav-logo-img-wrap">
-              <img src={Logo} alt="PSG Logo" className="nav-logo-img" />
+              <img src={Logo} alt="PSG Tech Alumni Foundation" className="nav-logo-img" />
             </div>
             <div className="nav-logo-text">
-              <div className="nav-logo-main">PSG Tech Alumni</div>
-              <div className="nav-logo-sub">Foundation</div>
+              <div className="nav-logo-main">PSG TECH</div>
+              <div className="nav-logo-sub">Alumni Foundation</div>
             </div>
           </Link>
 
-          {/* DESKTOP LINKS */}
           <div className="nav-links">
             {navItems.map((item) =>
               item.submenu ? (
@@ -417,15 +440,23 @@ export default function NavBar() {
                       className={`chevron-icon ${isDropdownOpen(item.label) ? "chevron-open" : ""}`}
                     />
                   </button>
-                  <div className={`dropdown-panel ${isDropdownOpen(item.label) ? "open" : ""}`}>
+                  <div
+                    className={`dropdown-panel ${isDropdownOpen(item.label) ? "open" : ""}`}
+                  >
                     <div className="dropdown-gold-bar" />
                     <div style={{ padding: "6px 0" }}>
                       {item.submenu.map((sub) => (
                         <NavLink
                           key={sub.path}
                           to={sub.path}
-                          onClick={() => { setAboutOpen(false); setEventsOpen(false); setAlumniOpen(false); }}
-                          className={({ isActive }) => `dropdown-item${isActive ? " active-dd" : ""}`}
+                          onClick={() => {
+                            setAboutOpen(false);
+                            setEventsOpen(false);
+                            setAlumniOpen(false);
+                          }}
+                          className={({ isActive }) =>
+                            `dropdown-item${isActive ? " active-dd" : ""}`
+                          }
                         >
                           {sub.label}
                         </NavLink>
@@ -437,19 +468,23 @@ export default function NavBar() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+                  className={({ isActive }) =>
+                    `nav-link${isActive ? " active" : ""}`
+                  }
                 >
                   {item.label}
                 </NavLink>
-              )
+              ),
             )}
           </div>
 
-          {/* DESKTOP RIGHT */}
           <div className="nav-actions">
             {user ? (
               <div style={{ position: "relative" }} ref={userMenuRef}>
-                <button className="user-btn" onClick={() => setUserMenuOpen((p) => !p)}>
+                <button
+                  className="user-btn"
+                  onClick={() => setUserMenuOpen((p) => !p)}
+                >
                   <div className="user-avatar">
                     {user.firstName?.[0]}
                     {user.lastName?.[0]}
@@ -457,52 +492,72 @@ export default function NavBar() {
                   <div>
                     <div className="user-name">{user.firstName}</div>
                   </div>
-                  <ChevronDown size={13} className={`chevron-icon ${userMenuOpen ? "chevron-open" : ""}`} />
+                  <ChevronDown
+                    size={13}
+                    className={`chevron-icon ${userMenuOpen ? "chevron-open" : ""}`}
+                  />
                 </button>
-                {userMenuOpen && (
-                  <div className="user-dropdown">
-                    <div className="dropdown-gold-bar" />
-                    <div className="user-dropdown-header">
-                      <div className="ud-signed-in">Signed in as</div>
-                      <div className="ud-name">
-                        {user.firstName} {user.lastName}
-                      </div>
-                    </div>
-                    <div style={{ padding: "6px 0" }}>
-                      <NavLink to="/alumni/profile" onClick={() => setUserMenuOpen(false)} className="ud-item">
-                        <User size={14} /> My Profile
+
+                <div className={`user-dropdown ${userMenuOpen ? "open" : ""}`}>
+                  <div style={{ padding: "6px 0" }}>
+                    <NavLink
+                      to="/alumni/profile"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="ud-item"
+                    >
+                      <User size={14} /> My Profile
+                    </NavLink>
+                    <NavLink
+                      to="/alumni/donations"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="ud-item"
+                    >
+                      💳 My Donations
+                    </NavLink>
+                    {user.isAdmin && (
+                      <NavLink
+                        to="/alumni/dashboard"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="ud-item"
+                      >
+                        <LayoutDashboard
+                          size={14}
+                          style={{ color: "var(--gold)" }}
+                        />{" "}
+                        Admin Dashboard
                       </NavLink>
-                      <NavLink to="/alumni/donations" onClick={() => setUserMenuOpen(false)} className="ud-item">
-                        💳 My Donations
-                      </NavLink>
-                      {user.isAdmin && (
-                        <NavLink to="/alumni/dashboard" onClick={() => setUserMenuOpen(false)} className="ud-item">
-                          <LayoutDashboard size={14} style={{ color: "var(--gold)" }} /> Admin Dashboard
-                        </NavLink>
-                      )}
-                      <div className="ud-divider" />
-                      <button onClick={handleLogout} className="ud-item danger">
-                        <LogOut size={14} /> Sign Out
-                      </button>
-                    </div>
+                    )}
+                    <div className="ud-divider" />
+                    <button 
+                      onClick={handleLogout} 
+                      className="ud-item danger"
+                    >
+                      <LogOut size={14} /> Sign Out
+                    </button>
                   </div>
-                )}
+                </div>
               </div>
             ) : (
               <>
-                <Link to="/alumni/login" className="btn-ghost-nav">Sign In</Link>
-                <Link to="/donate" className="btn-gold-nav">Donate</Link>
+                <Link to="/alumni/login" className="btn-ghost-nav">
+                  Sign In
+                </Link>
+                <Link to="/donate" className="btn-gold-nav">
+                  Donate
+                </Link>
               </>
             )}
           </div>
 
-          {/* HAMBURGER */}
-          <button className="ham-btn" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
+          <button
+            className="ham-btn"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        {/* MOBILE */}
         {isOpen && (
           <div className="mobile-panel">
             {navItems.map((item) =>
@@ -520,10 +575,21 @@ export default function NavBar() {
                   </button>
                   <div
                     className="m-sub"
-                    style={{ maxHeight: isMobileDropdownOpen(item.label) ? "300px" : "0" }}
+                    style={{
+                      maxHeight: isMobileDropdownOpen(item.label)
+                        ? "400px"
+                        : "0",
+                    }}
                   >
                     {item.submenu.map((sub) => (
-                      <NavLink key={sub.path} to={sub.path} onClick={closeAll} className="m-sub-link">
+                      <NavLink
+                        key={sub.path}
+                        to={sub.path}
+                        onClick={closeAll}
+                        className={({ isActive }) =>
+                          `m-sub-link${isActive ? " active" : ""}`
+                        }
+                      >
                         {sub.label}
                       </NavLink>
                     ))}
@@ -534,11 +600,13 @@ export default function NavBar() {
                   key={item.path}
                   to={item.path}
                   onClick={closeAll}
-                  className={({ isActive }) => `m-link${isActive ? " m-active" : ""}`}
+                  className={({ isActive }) =>
+                    `m-link${isActive ? " m-active" : ""}`
+                  }
                 >
                   {item.label}
                 </NavLink>
-              )
+              ),
             )}
 
             {user ? (
@@ -549,27 +617,53 @@ export default function NavBar() {
                     {user.firstName} {user.lastName}
                   </div>
                 </div>
-                <NavLink to="/alumni/profile" onClick={closeAll} className="m-link">
+                <NavLink
+                  to="/alumni/profile"
+                  onClick={closeAll}
+                  className="m-link"
+                >
                   <User size={15} /> My Profile
                 </NavLink>
-                <NavLink to="/alumni/donations" onClick={closeAll} className="m-link">
+                <NavLink
+                  to="/alumni/donations"
+                  onClick={closeAll}
+                  className="m-link"
+                >
                   💳 My Donations
                 </NavLink>
                 {user.isAdmin && (
-                  <NavLink to="/alumni/dashboard" onClick={closeAll} className="m-link">
+                  <NavLink
+                    to="/alumni/dashboard"
+                    onClick={closeAll}
+                    className="m-link"
+                  >
                     <LayoutDashboard size={15} /> Admin Dashboard
                   </NavLink>
                 )}
                 <div className="m-btn-row">
-                  <button onClick={() => { handleLogout(); closeAll(); }} className="m-btn-danger">
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      closeAll();
+                    }}
+                    className="m-btn-danger"
+                  >
                     <LogOut size={15} /> Sign Out
                   </button>
                 </div>
               </>
             ) : (
               <div className="m-btn-row">
-                <Link to="/alumni/login" onClick={closeAll} className="m-btn-ghost">Alumni Login</Link>
-                <Link to="/donate" onClick={closeAll} className="m-btn-gold">Donate Now</Link>
+                <Link
+                  to="/alumni/login"
+                  onClick={closeAll}
+                  className="m-btn-ghost"
+                >
+                  Alumni Login
+                </Link>
+                <Link to="/donate" onClick={closeAll} className="m-btn-gold">
+                  Donate Now
+                </Link>
               </div>
             )}
           </div>
@@ -577,4 +671,6 @@ export default function NavBar() {
       </nav>
     </>
   );
-}
+}  
+
+   

@@ -24,7 +24,9 @@ const AlumniLogin = () => {
 
   const validateForm = useCallback(() => {
     const newErrors = {};
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       newErrors.email = "Valid email is required";
     }
     if (!password) {
@@ -43,7 +45,10 @@ const AlumniLogin = () => {
       setErrors({});
 
       try {
-        const response = await authAPI.login({ email, password });
+        const response = await authAPI.login({
+          email: email.trim(),
+          password,
+        });
 
         if (response.data.token) {
           // ✅ FIX 2: Use context login() — updates NavBar state instantly
