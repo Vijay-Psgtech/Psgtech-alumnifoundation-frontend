@@ -17,6 +17,10 @@ const OfficeBearersPage = lazy(() => import("./pages/OfficeBearersPage"));
 const Patrons = lazy(() => import("./pages/PatronsPage"));
 const Contact = lazy(() => import("./pages/ContactUsPage"));
 const DonatePage = lazy(() => import("./pages/DonatePage"));
+const Engagement = lazy(() => import("./pages/Engagementpage"));
+const Initiatives = lazy(() => import("./pages/InitiativesPage"));
+const Gallery = lazy(() => import("./pages/GalleryPage"));
+const CouncilPage = lazy(() => import("./pages/CouncilPage"));
 
 // ═══════════════════════════════════════════════════════════════════════
 // EVENT PAGES
@@ -129,6 +133,10 @@ export default function App() {
             <Route path="/events/albums" element={<YearAlbumsPage />} />
             <Route path="/events/:id" element={<EventDetailPage />} />
             <Route path="donate" element={<DonatePage />} />
+            <Route path="engagement" element={<Engagement />} />
+            <Route path="initiatives" element={<Initiatives />} />
+            <Route path="gallery" element={<Gallery />} />
+            <Route path="council" element={<CouncilPage />} />
 
             {/* ALUMNI AUTH */}
             <Route
